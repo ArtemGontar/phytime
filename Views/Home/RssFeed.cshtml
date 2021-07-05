@@ -1,0 +1,11 @@
+﻿@using System.ServiceModel.Syndication;
+@model IEnumerable<SyndicationItem>
+@{
+    ViewBag.Title = "RssFeed";
+}
+
+@foreach (SyndicationItem item in Model)
+{
+    <h3>@item.Title.Text</h3>
+    <p>@item.Summary.Text</p>
+}

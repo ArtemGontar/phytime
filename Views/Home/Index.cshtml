@@ -1,0 +1,13 @@
+﻿@model List<string>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h3>В списке @Model.Count элемента</h3>
+@foreach (string item in Model)
+{
+<form action="Home/RssFeed" method="POST">
+    <input type="text" value="@item" name="url" />
+    <input type="submit" value="Read" />
+</form>
+}
