@@ -1,6 +1,18 @@
-<body>
-  <app-nav-menu></app-nav-menu>
-  <div class="container">
-    <router-outlet></router-outlet>
-  </div>
-</body>
+﻿<h1>Rss Feeds</h1>
+<table>
+    <thead>
+        <tr>
+            <td>Title</td>
+            <td>Date time</td>
+            <td>Summary</td>
+            <td></td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let f of feeds">
+            <td>{{f?.title}}</td>
+            <td>{{f?.publishdate}}</td>
+            <td>{{f?.summary}}</td>
+        </tr>
+    </tbody>
+</table>
