@@ -8,6 +8,8 @@ using System.ServiceModel;
 using System.ServiceModel.Syndication;
 using System.Linq;
 using Phytime.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace Phytime.Controllers
 {
@@ -17,19 +19,13 @@ namespace Phytime.Controllers
     {
         private static List<SyndicationItem> _feedItems;
 
+        [Authorize]
         public IActionResult Index()
         {
             var list = GetUrls();
-            return View(list);
-        }
-
-        [HttpGet]
-        public IEnumerable<Feed> Get()
-        {
-            var list = new List<Feed>();
-            list.Add(new Feed() { Title = "title1", PublishDate = "date1", Summary = "summary1" });
-            list.Add(new Feed() { Title = "title2", PublishDate = "date2", Summary = "summary2" });
-            return list;
+            ViewBag.UrlList = list;
+            ViewBag.Login = HttpContext.User.Identity.Name;
+            return View();
         }
 
         public List<string> GetUrls()
@@ -71,7 +67,8 @@ namespace Phytime.Controllers
         //[HttpPost]
         public ActionResult RssFeed(string url, int page)
         {
-            if(_feedItems == null)
+            ViewBag.Login = HttpContext.User.Identity.Name;
+            if (_feedItems == null)
             {
                 XmlReader reader = XmlReader.Create(url);
                 SyndicationFeed feed = SyndicationFeed.Load(reader);
@@ -89,6 +86,11 @@ namespace Phytime.Controllers
         {
             _feedItems.Reverse();
             return Redirect("/Home/RssFeed");
+        }
+
+        public RedirectResult Logout()
+        {
+            return Redirect("/Account/Logout");
         }
     }
 }
