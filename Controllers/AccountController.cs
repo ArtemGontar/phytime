@@ -12,9 +12,9 @@ namespace Phytime.Controllers
 {
     public class AccountController : Controller
     {
-        private UserContext _context;
+        private PhytimeContext _context;
 
-        public AccountController(UserContext context)
+        public AccountController(PhytimeContext context)
         {
             _context = context;
         }
@@ -77,8 +77,7 @@ namespace Phytime.Controllers
             // создаем один claim
             var claims = new List<Claim>
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, userName),
-                new Claim(ClaimTypes.Email, "ABOBA")
+                new Claim(ClaimsIdentity.DefaultNameClaimType, userName)
             };
             // создаем объект ClaimsIdentity
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);

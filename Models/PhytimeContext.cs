@@ -2,10 +2,11 @@
 
 namespace Phytime.Models
 {
-    public class UserContext : DbContext
+    public class PhytimeContext : DbContext
     {
         public DbSet<User> Users { get; set; }
-        public UserContext(DbContextOptions<UserContext> options)
+        public DbSet<Feed> Feeds { get; set; }
+        public PhytimeContext(DbContextOptions<PhytimeContext> options)
             : base(options)
         {
             Database.EnsureCreated();

@@ -1,16 +1,16 @@
 ﻿import { Injectable } from '@angular/core';
 import { HttpClient} from '@angular/common/http';
-import { Feed } from './feed';
+import { Item } from './item';
  
 @Injectable()
 export class DataService {
  
-    private url = "/api/feeds";
+    private url = "/api/items";
  
     constructor(private http: HttpClient) {
     }
  
-    getFeeds() {
+    getItems() {
         return this.http.get(this.url);
     }
 }

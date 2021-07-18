@@ -16,9 +16,4 @@ namespace Phytime.Models
             get { return (int)Math.Ceiling((decimal)TotalItems / PageSize); }
         }
     }
-    public class RssFeedViewModel
-    {
-        public IEnumerable<SyndicationItem> SyndicationItems { get; set; }
-        public PageInfo PageInfo { get; set; }
-    }
 }

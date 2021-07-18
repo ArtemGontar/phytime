@@ -22,7 +22,7 @@ namespace Phytime
         public void ConfigureServices(IServiceCollection services)
         {
             string connection = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<UserContext>(options => options.UseSqlServer(connection));
+            services.AddDbContext<PhytimeContext>(options => options.UseSqlServer(connection));
 
             // установка конфигурации подключения
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -56,7 +56,7 @@ namespace Phytime
             app.UseRouting();
 
             app.UseAuthentication();   
-            app.UseAuthorization();   
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
@@ -65,11 +65,6 @@ namespace Phytime
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            //app.UseEndpoints(endpoints =>
-            //{
-            //    endpoints.MapControllers();
-            //});
-
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "ClientApp";
@@ -77,6 +72,7 @@ namespace Phytime
                 if (env.IsDevelopment())
                 {
                     spa.UseAngularCliServer(npmScript: "start");
+                    //spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
                 }
             });
         }

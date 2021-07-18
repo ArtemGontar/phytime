@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Feed = void 0;
-var Feed = /** @class */ (function () {
-    function Feed(title, publishdate, summary) {
+exports.Item = void 0;
+var Item = /** @class */ (function () {
+    function Item(title, publishdate, summary) {
         this.title = title;
         this.publishdate = publishdate;
         this.summary = summary;
     }
-    return Feed;
+    return Item;
 }());
-exports.Feed = Feed;
-//# sourceMappingURL=feed.js.map
+exports.Item = Item;
+//# sourceMappingURL=item.js.map
