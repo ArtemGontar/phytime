@@ -19,6 +19,7 @@ namespace Phytime.Controllers
     public class HomeController : Controller
     {
         private PhytimeContext _context;
+        private static List<string> _feedUrlList;
 
         public HomeController(PhytimeContext context)
         {
@@ -28,9 +29,12 @@ namespace Phytime.Controllers
         [Authorize]
         public IActionResult Index()
         {
-            var list = GetUrls();
-            CheckUrls(list);
-            ViewBag.UrlList = list;
+            if(_feedUrlList == null)
+            {
+                _feedUrlList = GetUrls();
+            }
+            CheckUrls(_feedUrlList);
+            ViewBag.UrlList = _feedUrlList;
             ViewBag.Login = HttpContext.User.Identity.Name;
             return View();
         }
