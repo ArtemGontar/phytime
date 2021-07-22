@@ -1,11 +1,13 @@
-﻿@{
+﻿@using Phytime.Models
+@model RssSource
+@{
     ViewBag.Title = "Index";
 }
 
 <h3>RSS-новости научной периодики по психологии</h3>
-<h4>В списке @(ViewBag.UrlList.Count/2) элемента</h4>
-@for (int i = 0; i < ViewBag.UrlList.Count; i += 2)
+<h4>В списке @(Model.Urls.Count) элемента</h4>
+@for (int i = 0; i < Model.Urls.Count; i++)
 {
-    @Html.ActionLink((string) ViewBag.UrlList[i], "RssFeed", "Feed", new { url = (string) ViewBag.UrlList[i+1], page = 1 })
+    @Html.ActionLink((string)Model.Titles[i], "RssFeed", "Feed", new { url = (string)Model.Urls[i], page = 1 })
     <br />
 }

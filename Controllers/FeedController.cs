@@ -13,7 +13,7 @@ namespace Phytime.Controllers
     public class FeedController : Controller
     {
         private PhytimeContext _context;
-        private const int PAGE_SIZE = 5;
+        private const int PageSize = 5;
 
         public FeedController(PhytimeContext context)
         {
@@ -31,8 +31,8 @@ namespace Phytime.Controllers
                 var sorterer = new FeedSorterer();
                 sorterer.SortFeed(selectedSort, ref feedItems);
             }
-            IEnumerable<SyndicationItem> itemsPerPages = feedItems.Skip((page - 1) * PAGE_SIZE).Take(PAGE_SIZE);
-            PageInfo pageInfo = new PageInfo { PageNumber = page, PageSize = PAGE_SIZE, TotalItems = feedItems.Count };
+            IEnumerable<SyndicationItem> itemsPerPages = feedItems.Skip((page - 1) * PageSize).Take(PageSize);
+            PageInfo pageInfo = new PageInfo { PageNumber = page, PageSize = PageSize, TotalItems = feedItems.Count };
             Feed rssFeed = new Feed { Url = url, PageInfo = pageInfo, SyndicationItems = itemsPerPages };
             return View(rssFeed);
         }
@@ -59,7 +59,7 @@ namespace Phytime.Controllers
             return false;
         }
 
-        private async Task<IActionResult> Subscribe(string url)
+        public async Task<IActionResult> Subscribe(string url)
         {
             User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == HttpContext.User.Identity.Name);
             var feed = new Feed() { Url = url };
@@ -69,7 +69,7 @@ namespace Phytime.Controllers
             return RedirectToAction("RssFeed", new { url = url, page = 1});
         }
 
-        private async Task<IActionResult> UnSubscribe(string url)
+        public async Task<IActionResult> UnSubscribe(string url)
         {
             User user = _context.Users.Include(s => s.Feeds).FirstOrDefault(s => s.Email == HttpContext.User.Identity.Name);
             Feed dbFeed = await _context.Feeds.FirstOrDefaultAsync(f => f.Url == url);

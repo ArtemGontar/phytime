@@ -19,7 +19,7 @@ namespace Phytime.Controllers
     public class HomeController : Controller
     {
         private PhytimeContext _context;
-        private static List<string> _feedUrlList;
+        private static RssSource _rssSource;
 
         public HomeController(PhytimeContext context)
         {
@@ -29,86 +29,24 @@ namespace Phytime.Controllers
         [Authorize]
         public IActionResult Index()
         {
-            if(_feedUrlList == null)
+            if(_rssSource == null)
             {
-                _feedUrlList = GetUrls();
+                _rssSource = new RssSource();
+                _rssSource.Titles = RssFeedSourceReader.GetTitles();
+                _rssSource.Urls = RssFeedSourceReader.GetUrls();
             }
 
             //this method checks if there are any new items in rss feeds and send email to subscribed users
             //planning to create special service with this method and special timer and start this service in Startup class
-            CheckUrls(_feedUrlList);
+            //CheckUrls(_rssSource);
 
-            ViewBag.UrlList = _feedUrlList;
             ViewBag.Login = HttpContext.User.Identity.Name;
-            return View();
-        }
-
-        public List<string> GetUrls()
-        {
-            var urlList = new List<string>();
-            string regularExpressionPattern1 = @"<th.*?>(.*?)<\/th>";
-            Regex titleRegex = new Regex(regularExpressionPattern1, RegexOptions.Singleline);
-            Regex linkRegex = new Regex(@"\bhttps://[^<]*");
-            WebRequest request = WebRequest.Create("https://psyjournals.ru/rss/");
-            WebResponse response = request.GetResponse();
-            using (StreamReader stream = new StreamReader(response.GetResponseStream()))
-            {
-                string line = "";
-                while ((line = stream.ReadLine()) != null)
-                {
-                    if (line.Contains("</th>"))
-                    {
-                        MatchCollection collection = titleRegex.Matches(line);
-                        Match m = collection[0];
-                        urlList.Add(m.Groups[1].Value);
-                        continue;
-                    }
-                    if (line.Contains(".rss</a>"))
-                    {
-                        Match match = linkRegex.Match(line);
-                        urlList.Add(match.Value);
-                    }
-                }
-            }
-            return urlList;
+            return View(_rssSource);
         }
 
         public RedirectResult Logout()
         {
             return Redirect("/Account/Logout");
-        }
-
-        public void CheckUrls(List<string> urlList)
-        {
-            for(int i = 1; i < urlList.Count; i+=2)
-            {
-                XmlReader reader = XmlReader.Create(urlList[i]);
-                SyndicationFeed feed = SyndicationFeed.Load(reader);
-                reader.Close();
-                var rssFeed = _context.Feeds.FirstOrDefault(f => f.Url == urlList[i]);
-                if (rssFeed != null)
-                {
-                    if(/*true*/rssFeed.ItemsCount != feed.Items.ToList().Count)
-                    {
-                        SendNotifications(urlList[i], urlList[i - 1]);
-                    }
-                }
-                else
-                {
-                    _context.Feeds.Add(new Feed { Url = urlList[i], ItemsCount = feed.Items.ToList().Count });
-                    _context.SaveChanges();
-                }
-            }
-        }
-
-        public void SendNotifications(string feedUrl, string feedTitle)
-        {
-            EmailService service = new EmailService();
-            var rssfeed = _context.Feeds.Include(f => f.Users).FirstOrDefault(f => f.Url == feedUrl);
-            foreach (var user in rssfeed.Users)
-            {
-                service.SendEmail(user.Email, "Обновление записей", feedTitle);
-            }
         }
     }
 }

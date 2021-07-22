@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Phytime.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Configuration;
+using Phytime.Services;
 
 namespace Phytime
 {
@@ -24,21 +25,20 @@ namespace Phytime
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<PhytimeContext>(options => options.UseSqlServer(connection));
 
-            // установка конфигурации подключения
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options => //CookieAuthenticationOptions
                 {
                     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
                 });
 
-            //services.AddControllers();
-
             services.AddMvc();
 
-            services.AddSpaStaticFiles(configuration =>
-            {
-                configuration.RootPath = "ClientApp/dist";
-            });
+            services.AddHostedService<EmailService>();
+
+            //services.AddSpaStaticFiles(configuration =>
+            //{
+            //    configuration.RootPath = "ClientApp/dist";
+            //});
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -65,16 +65,16 @@ namespace Phytime
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            app.UseSpa(spa =>
-            {
-                spa.Options.SourcePath = "ClientApp";
+            //app.UseSpa(spa =>
+            //{
+            //    spa.Options.SourcePath = "ClientApp";
 
-                if (env.IsDevelopment())
-                {
-                    spa.UseAngularCliServer(npmScript: "start");
-                    //spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
-                }
-            });
+            //    if (env.IsDevelopment())
+            //    {
+            //        spa.UseAngularCliServer(npmScript: "start");
+            //        //spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
+            //    }
+            //});
         }
     }
 }
