@@ -33,7 +33,11 @@ namespace Phytime.Controllers
             {
                 _feedUrlList = GetUrls();
             }
+
+            //this method checks if there are any new items in rss feeds and send email to subscribed users
+            //planning to create special service with this method and special timer and start this service in Startup class
             CheckUrls(_feedUrlList);
+
             ViewBag.UrlList = _feedUrlList;
             ViewBag.Login = HttpContext.User.Identity.Name;
             return View();
@@ -45,16 +49,10 @@ namespace Phytime.Controllers
             string regularExpressionPattern1 = @"<th.*?>(.*?)<\/th>";
             Regex titleRegex = new Regex(regularExpressionPattern1, RegexOptions.Singleline);
             Regex linkRegex = new Regex(@"\bhttps://[^<]*");
-            // Создать объект запроса
             WebRequest request = WebRequest.Create("https://psyjournals.ru/rss/");
-
-            // Получить ответ с сервера
             WebResponse response = request.GetResponse();
-
-            // Получаем поток данных из ответа
             using (StreamReader stream = new StreamReader(response.GetResponseStream()))
             {
-                // Выводим исходный код страницы
                 string line = "";
                 while ((line = stream.ReadLine()) != null)
                 {
