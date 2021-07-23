@@ -58,7 +58,10 @@ namespace Phytime.Controllers
                 User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
                 if (user == null)
                 {
-                    _context.Users.Add(new User { Email = model.Email, Password = model.Password });
+                    var newUser = new User();
+                    newUser.Email = model.Email;
+                    newUser.SetPassword(model.Password);
+                    _context.Users.Add(newUser);
                     await _context.SaveChangesAsync();
 
                     await Authenticate(model.Email);

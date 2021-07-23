@@ -23,18 +23,13 @@ namespace Phytime.Services
 
         public EmailService(IServiceScopeFactory scopeFactory)
         {
-            if (_rssSource == null)
-            {
-                _rssSource = new RssSource();
-                _rssSource.Titles = RssFeedSourceReader.GetTitles();
-                _rssSource.Urls = RssFeedSourceReader.GetUrls();
-            }
+            _rssSource = RssSource.getInstance();
             _scopeFactory = scopeFactory;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            _timer = new Timer(CheckUrls, null, TimeSpan.Zero, TimeSpan.FromSeconds(30));
+            _timer = new Timer(CheckUrls, null, TimeSpan.FromSeconds(60), TimeSpan.FromSeconds(30));
 
             return Task.CompletedTask;
         }
@@ -64,7 +59,7 @@ namespace Phytime.Services
                     var rssFeed = _context.Feeds.FirstOrDefault(f => f.Url == _rssSource.Urls[i]);
                     if (rssFeed != null)
                     {
-                        if (true/*rssFeed.ItemsCount != feed.Items.ToList().Count*/)
+                        if (/*true*/rssFeed.ItemsCount != feed.Items.ToList().Count)
                         {
                             SendNotifications(_rssSource.Urls[i], _rssSource.Titles[i]);
                         }
