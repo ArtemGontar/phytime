@@ -7,9 +7,11 @@ using System.ServiceModel.Syndication;
 using System.Threading.Tasks;
 using System.Xml;
 using Phytime.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Phytime.Controllers
 {
+    [Authorize]
     public class FeedController : Controller
     {
         private PhytimeContext _context;
