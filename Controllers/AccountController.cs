@@ -12,7 +12,7 @@ namespace Phytime.Controllers
 {
     public class AccountController : Controller
     {
-        private PhytimeContext _context;
+        private readonly PhytimeContext _context;
 
         public AccountController(PhytimeContext context)
         {
@@ -58,8 +58,7 @@ namespace Phytime.Controllers
                 User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
                 if (user == null)
                 {
-                    var newUser = new User();
-                    newUser.Email = model.Email;
+                    var newUser = new User() { Email = model.Email };
                     newUser.SetPassword(model.Password);
                     _context.Users.Add(newUser);
                     await _context.SaveChangesAsync();

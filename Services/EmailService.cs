@@ -29,7 +29,7 @@ namespace Phytime.Services
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            _timer = new Timer(CheckUrls, null, TimeSpan.FromSeconds(60), TimeSpan.FromSeconds(30));
+            _timer = new Timer(CheckUrls, null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(60));
 
             return Task.CompletedTask;
         }
@@ -48,26 +48,27 @@ namespace Phytime.Services
 
         public void CheckUrls(object state)
         {
+            System.Diagnostics.Debug.WriteLine("STARTING!!!");
             using (var scope = _scopeFactory.CreateScope())
             {
                 PhytimeContext _context = scope.ServiceProvider.GetRequiredService<PhytimeContext>();
-                for (int i = 0; i < _rssSource.Urls.Count; i++)
+                foreach(var url in _rssSource.Urls)
                 {
-                    XmlReader reader = XmlReader.Create(_rssSource.Urls[i]);
+                    XmlReader reader = XmlReader.Create(url);
                     SyndicationFeed feed = SyndicationFeed.Load(reader);
                     reader.Close();
-                    var rssFeed = _context.Feeds.FirstOrDefault(f => f.Url == _rssSource.Urls[i]);
+                    var rssFeed = _context.Feeds.FirstOrDefault(f => f.Url == url);
                     if (rssFeed != null)
                     {
-                        if (/*true*/rssFeed.ItemsCount != feed.Items.ToList().Count)
+                        if (rssFeed.ItemsCount != feed.Items.ToList().Count)
                         {
-                            SendNotifications(_rssSource.Urls[i], _rssSource.Titles[i]);
+                            SendNotifications(url, _rssSource.Titles[_rssSource.Urls.IndexOf(url)]);
                         }
                     }
                     //needs to be moved to new class
                     else
                     {
-                        _context.Feeds.Add(new Feed { Url = _rssSource.Urls[i], ItemsCount = feed.Items.ToList().Count });
+                        _context.Feeds.Add(new Feed { Url = url, ItemsCount = feed.Items.ToList().Count });
                         _context.SaveChanges();
                     }
                 }
@@ -83,18 +84,16 @@ namespace Phytime.Services
                 var rssfeed = _context.Feeds.Include(f => f.Users).FirstOrDefault(f => f.Url == feedUrl);
                 foreach (var user in rssfeed.Users)
                 {
-                    SendEmail(user.Email, "Обновление записей", feedTitle);
+                    SendEmail(user.Email, "Updating records", feedTitle);
                 }
             }
-                
-            
         }
 
         public void SendEmail(string email, string subject, string message)
         {
             var emailMessage = new MimeMessage();
 
-            emailMessage.From.Add(new MailboxAddress("Администрация сайта", "localhosttest@yandex.by"));
+            emailMessage.From.Add(new MailboxAddress("Site administration", "localhosttest@yandex.by"));
             emailMessage.To.Add(new MailboxAddress("", email));
             emailMessage.Subject = subject;
             emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)

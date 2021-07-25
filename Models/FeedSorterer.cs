@@ -7,6 +7,9 @@ namespace Phytime.Services
 {
     public class FeedSorterer
     {
+        private const int _MonthDaysCount = 31;
+        private const int _WeekDaysCount = 7;
+
         private void SortByNewest(ref List<SyndicationItem> list)
         {
             var comparer = new DateComparer<SyndicationItem>();
@@ -48,7 +51,7 @@ namespace Phytime.Services
             DateTime currentDate = DateTime.Now;
             foreach (var item in list)
             {
-                if (currentDate.AddDays(-7) <= item.PublishDate)
+                if (currentDate.AddDays(-_WeekDaysCount) <= item.PublishDate)
                 {
                     newList.Add(item);
                 }
@@ -62,7 +65,7 @@ namespace Phytime.Services
             DateTime currentDate = DateTime.Now;
             foreach (var item in list)
             {
-                if (currentDate.AddDays(-31) >= item.PublishDate)
+                if (currentDate.AddDays(-_MonthDaysCount) >= item.PublishDate)
                 {
                     newList.Add(item);
                 }

@@ -12,7 +12,7 @@ namespace Phytime.ViewModels
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "Incorrect password")]
+        [Compare("Password", ErrorMessage = "Passwords should be equals")]
         public string ConfirmPassword { get; set; }
     }
 }

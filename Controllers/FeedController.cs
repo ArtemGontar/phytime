@@ -11,10 +11,9 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Phytime.Controllers
 {
-    [Authorize]
     public class FeedController : Controller
     {
-        private PhytimeContext _context;
+        private readonly PhytimeContext _context;
         private const int PageSize = 5;
 
         public FeedController(PhytimeContext context)
@@ -49,16 +48,9 @@ namespace Phytime.Controllers
 
         private bool IsSubscribed(string url)
         {
-            User user = _context.Users.FirstOrDefault(u => u.Email == HttpContext.User.Identity.Name);
-            var feeds = _context.Feeds.Include(c => c.Users).ToList();
-            foreach(var item in feeds)
-            {
-                if(item.Url.Equals(url) && item.Users.Contains(user))
-                {
-                    return true;
-                }
-            }
-            return false;
+            var contains = _context.Feeds.Include(c => c.Users).FirstOrDefault(feed => feed.Url == url)
+                .Users.Select(u => u.Email).Contains(HttpContext.User.Identity.Name);
+            return contains;
         }
 
         public async Task<IActionResult> Subscribe(string url)
@@ -73,9 +65,10 @@ namespace Phytime.Controllers
 
         public async Task<IActionResult> UnSubscribe(string url)
         {
-            User user = _context.Users.Include(s => s.Feeds).FirstOrDefault(s => s.Email == HttpContext.User.Identity.Name);
-            Feed dbFeed = await _context.Feeds.FirstOrDefaultAsync(f => f.Url == url);
-            var i = user.Feeds.Remove(dbFeed);
+            User user = _context.Users.Include(user => user.Feeds)
+                .FirstOrDefault(user => user.Email == HttpContext.User.Identity.Name);
+            Feed dbFeed = await _context.Feeds.FirstOrDefaultAsync(feed => feed.Url == url);
+            user.Feeds.Remove(dbFeed);
             _context.SaveChanges();
             return RedirectToAction("RssFeed", new { url = url, page = 1 });
         }

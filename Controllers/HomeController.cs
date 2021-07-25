@@ -6,8 +6,8 @@ namespace Phytime.Controllers
 {
     public class HomeController : Controller
     {
-        private PhytimeContext _context;
-        private RssSource _rssSource;
+        private readonly PhytimeContext _context;
+        private readonly RssSource _rssSource;
 
         public HomeController(PhytimeContext context)
         {
