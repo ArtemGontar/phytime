@@ -8,6 +8,7 @@ using Phytime.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Configuration;
 using Phytime.Services;
+using Microsoft.AspNetCore.Identity;
 
 namespace Phytime
 {
@@ -32,6 +33,10 @@ namespace Phytime
                 });
 
             services.AddMvc();
+
+            services.AddSingleton<EmailService>(x =>
+                new EmailService(x.GetRequiredService<IServiceScopeFactory>(),
+                x.GetRequiredService<IConfiguration>()));
 
             services.AddHostedService<EmailService>();
 

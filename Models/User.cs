@@ -1,20 +1,16 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace Phytime.Models
 {
-    public class User
+    public class User : IdentityUser
     {
-        public int Id { get; set; }
-        public string Email { get; set; }
-        public string Password { get; private set; }
-
         public void SetPassword(string value)
         {
-            Password = GetHashString(value).ToString();
+            PasswordHash = GetHashString(value).ToString();
         }
 
         public List<Feed> Feeds { get; set; } = new List<Feed>();

@@ -8,17 +8,18 @@ using System.Threading.Tasks;
 using System.Xml;
 using Phytime.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
 
 namespace Phytime.Controllers
 {
     public class FeedController : Controller
     {
-        private readonly PhytimeContext _context;
-        private const int PageSize = 5;
+        private PhytimeContext _context => (PhytimeContext)HttpContext.RequestServices.GetService(typeof(PhytimeContext));
+        private readonly IConfiguration _config;
 
-        public FeedController(PhytimeContext context)
+        public FeedController(IConfiguration config)
         {
-            _context = context;
+            _config = config;
         }
 
         public ActionResult RssFeed(string url, int page)
@@ -32,8 +33,9 @@ namespace Phytime.Controllers
                 var sorterer = new FeedSorterer();
                 sorterer.SortFeed(selectedSort, ref feedItems);
             }
-            IEnumerable<SyndicationItem> itemsPerPages = feedItems.Skip((page - 1) * PageSize).Take(PageSize);
-            PageInfo pageInfo = new PageInfo { PageNumber = page, PageSize = PageSize, TotalItems = feedItems.Count };
+            int pageSize = int.Parse(_config["FeedPageInfo:pageSize"]);
+            IEnumerable<SyndicationItem> itemsPerPages = feedItems.Skip((page - 1) * pageSize).Take(pageSize);
+            PageInfo pageInfo = new PageInfo { PageNumber = page, PageSize = pageSize, TotalItems = feedItems.Count };
             Feed rssFeed = new Feed { Url = url, PageInfo = pageInfo, SyndicationItems = itemsPerPages };
             return View(rssFeed);
         }

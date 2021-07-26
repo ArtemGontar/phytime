@@ -9,6 +9,7 @@ namespace Phytime.ViewModels
     {
         private string _password;
         [Required(ErrorMessage = "Email is empty")]
+        [RegularExpression(@"\S*@{1}\S*", ErrorMessage = "Invalid email format")]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Password is empty")]
@@ -21,12 +22,16 @@ namespace Phytime.ViewModels
             }
             set
             {
-                _password = GetHashString(value).ToString();
+                _password = GetHashString(value);
             }
         }
 
-        private Guid GetHashString(string s)
+        private string GetHashString(string s)
         {
+            if(s == null)
+            {
+                return null;
+            }
             byte[] bytes = Encoding.Unicode.GetBytes(s);
 
             MD5CryptoServiceProvider CSP =
@@ -39,7 +44,7 @@ namespace Phytime.ViewModels
             foreach (byte b in byteHash)
                 hash += string.Format("{0:x2}", b);
 
-            return new Guid(hash);
+            return new Guid(hash).ToString();
         }
     }
 }

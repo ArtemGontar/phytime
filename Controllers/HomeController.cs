@@ -6,12 +6,10 @@ namespace Phytime.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly PhytimeContext _context;
         private readonly RssSource _rssSource;
 
-        public HomeController(PhytimeContext context)
+        public HomeController()
         {
-            _context = context;
             _rssSource = RssSource.getInstance();
         }
 

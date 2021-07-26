@@ -1,7 +1,7 @@
 {
   "version": 1,
   "projects": {
-    "helloangularapp": {
+    "Phytime": {
       "projectType": "application",
       "root": "",
       "sourceRoot": "src",
@@ -30,7 +30,7 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "helloangularapp:build"
+            "browserTarget": "Phytime:build"
           }
         }
       }
