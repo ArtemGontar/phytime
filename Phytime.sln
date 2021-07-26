@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30907.101
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Phytime", "Phytime.csproj", "{3ACA7EFD-D2F1-42C2-B51F-ED234628F693}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3ACA7EFD-D2F1-42C2-B51F-ED234628F693}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3ACA7EFD-D2F1-42C2-B51F-ED234628F693}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3ACA7EFD-D2F1-42C2-B51F-ED234628F693}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3ACA7EFD-D2F1-42C2-B51F-ED234628F693}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {17037915-9AAD-4DE4-BF09-FDC9B0D9DBB4}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,13 @@
+﻿@using Phytime.Models
+@model RssSource
+@{
+    ViewBag.Title = "Index";
+}
+
+<h3>RSS-новости научной периодики по психологии</h3>
+<h4>List contains @(Model.Urls.Count) elements</h4>
+@for (int i = 0; i < Model.Urls.Count; i++)
+{
+    @Html.ActionLink((string)Model.Titles[i], "RssFeed", "Feed", new { url = (string)Model.Urls[i], page = 1 })
+    <br />
+}
