@@ -25,14 +25,14 @@ namespace Phytime.Controllers
             return list;
         }
 
-        [HttpGet]
-        public IEnumerable<Item> GetSome()
-        {
-            var list = new List<Item>();
-            list.Add(new Item() { Title = "title3", PublishDate = "date3", Summary = "summary3" });
-            list.Add(new Item() { Title = "title4", PublishDate = "date4", Summary = "summary4" });
-            return list;
-        }
+        //[HttpGet]
+        //public IEnumerable<Item> GetSome()
+        //{
+        //    var list = new List<Item>();
+        //    list.Add(new Item() { Title = "title3", PublishDate = "date3", Summary = "summary3" });
+        //    list.Add(new Item() { Title = "title4", PublishDate = "date4", Summary = "summary4" });
+        //    return list;
+        //}
     }
 
     

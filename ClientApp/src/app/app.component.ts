@@ -9,13 +9,15 @@ import { Item } from './item';
 })
 export class AppComponent implements OnInit {
 
-    item: Item = new Item();
     items: Item[];
     tableMode: boolean = true;         
 
     constructor(private dataService: DataService) { }
 
-    // получаем данные через сервис
+    ngOnInit() {
+        this.loadItems();
+    }
+
     loadItems() {
         this.dataService.getItems()
             .subscribe((data: Item[]) => this.items = data);
