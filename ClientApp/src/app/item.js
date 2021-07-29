@@ -1,13 +1,20 @@
 "use strict";
+////export class Item {
+////    constructor(
+////        public title?: string,
+////        public publishdate?: string,
+////        public summary?: string) { }
+////}
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Item = void 0;
-var Item = /** @class */ (function () {
-    function Item(title, publishdate, summary) {
-        this.title = title;
-        this.publishdate = publishdate;
-        this.summary = summary;
+exports.Product = void 0;
+var Product = /** @class */ (function () {
+    function Product(id, name, company, price) {
+        this.id = id;
+        this.name = name;
+        this.company = company;
+        this.price = price;
     }
-    return Item;
+    return Product;
 }());
-exports.Item = Item;
+exports.Product = Product;
 //# sourceMappingURL=item.js.map

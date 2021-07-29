@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Phytime.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace Phytime
 {
@@ -34,6 +35,7 @@ namespace Phytime
                 });
 
             services.AddMvc();
+            services.AddSession();
 
             services.AddSingleton<EmailService>(x =>
                 new EmailService(x.GetRequiredService<IServiceScopeFactory>(),
@@ -61,6 +63,11 @@ namespace Phytime
 
             app.UseRouting();
 
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapControllers();
+            //});
+
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -78,7 +85,6 @@ namespace Phytime
                 if (env.IsDevelopment())
                 {
                     spa.UseAngularCliServer(npmScript: "start");
-                    //spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
                 }
             });
         }

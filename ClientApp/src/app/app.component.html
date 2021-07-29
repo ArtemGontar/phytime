@@ -1,18 +1,3 @@
-﻿<h1>Rss Items</h1>
-<table>
-    <thead>
-        <tr>
-            <td>Title</td>
-            <td>Date time</td>
-            <td>Summary</td>
-            <td></td>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let i of items">
-            <td>{{i?.title}}</td>
-            <td>{{i?.publishdate}}</td>
-            <td>{{i?.summary}}</td>
-        </tr>
-    </tbody>
-</table>
+﻿<div class="container body-content">
+    <router-outlet></router-outlet>
+</div>
