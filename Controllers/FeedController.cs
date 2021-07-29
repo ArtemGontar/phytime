@@ -77,36 +77,6 @@ namespace Phytime.Controllers
             return RedirectToAction("RssFeed", new { url = url, page = 1 });
         }
 
-        public IActionResult ShowAngular(string urlSource)
-        {
-            var list = GetItems(urlSource);
-            return Redirect("/angular");
-        }
-
-        private List<Product> GetItems(string url)
-        {
-            var list = GetSyndicationItems2(url);
-            return CreateItemsList(list);
-        }
-
-        private List<SyndicationItem> GetSyndicationItems2(string url)
-        {
-            XmlReader reader = XmlReader.Create(url);
-            SyndicationFeed feed = SyndicationFeed.Load(reader);
-            reader.Close();
-            return feed.Items.ToList();
-        }
-
-        private List<Product> CreateItemsList(List<SyndicationItem> list)
-        {
-            var itemsList = new List<Product>();
-            foreach (var item in list)
-            {
-                itemsList.Add(new Product { Id = 1, Name = item.Title.Text, Company = item.Summary.Text, Price = 1 });
-            }
-            return itemsList;
-        }
-
         public RedirectResult Logout()
         {
             return Redirect("/Account/Logout");
