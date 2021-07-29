@@ -41,12 +41,12 @@ namespace Phytime
                 new EmailService(x.GetRequiredService<IServiceScopeFactory>(),
                 x.GetRequiredService<IConfiguration>()));
 
-            //services.AddHostedService<EmailService>();
+            services.AddHostedService<EmailService>();
 
-            services.AddSpaStaticFiles(configuration =>
-            {
-                configuration.RootPath = "ClientApp/dist";
-            });
+            //services.AddSpaStaticFiles(configuration =>
+            //{
+            //    configuration.RootPath = "ClientApp/dist";
+            //});
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

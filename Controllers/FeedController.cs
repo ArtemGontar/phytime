@@ -36,7 +36,9 @@ namespace Phytime.Controllers
             int pageSize = int.Parse(_config["FeedPageInfo:pageSize"]);
             IEnumerable<SyndicationItem> itemsPerPages = feedItems.Skip((page - 1) * pageSize).Take(pageSize);
             PageInfo pageInfo = new PageInfo { PageNumber = page, PageSize = pageSize, TotalItems = feedItems.Count };
-            Feed rssFeed = new Feed { Url = url, PageInfo = pageInfo, SyndicationItems = itemsPerPages };
+            Feed rssFeed = _context.Feeds.FirstOrDefault(feed => feed.Url == url);//new Feed { Url = url, PageInfo = pageInfo, SyndicationItems = itemsPerPages };
+            rssFeed.PageInfo = pageInfo;
+            rssFeed.SyndicationItems = itemsPerPages;
             return View(rssFeed);
         }
 

@@ -31,7 +31,7 @@ namespace Phytime.Services
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            _timer = new Timer(CheckUrls, null, TimeSpan.FromSeconds(20), TimeSpan.FromSeconds(60));
+            _timer = new Timer(CheckUrls, null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(60));
 
             return Task.CompletedTask;
         }

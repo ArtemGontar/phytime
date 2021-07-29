@@ -5,13 +5,13 @@ import { Product } from './item';
 @Injectable()
 export class DataService {
 
-    private url = "/api/products";
+    private url = "/api/items/";
 
     constructor(private http: HttpClient) {
     }
 
     getProducts() {
-        return this.http.get(this.url);
+        return this.http.get(this.url + 'get');
     }
 
     getProduct(id: number) {

@@ -14,75 +14,33 @@ using Microsoft.AspNetCore.Http;
 namespace Phytime.Controllers
 {
     [ApiController]
-    [Route("api/products")]
+    [Route("api/[controller]/[action]")]
     public class ItemsController : Controller
     {
-        public static List<Product> list;
-        public ItemsController()
+        private readonly PhytimeContext _context;
+        public static List<Product> list /*= new List<Product>()*/;
+        public ItemsController(PhytimeContext context)
         {
-            //list.Add(new Product { Id = 1, Name = "iPhone X", Company = "Apple", Price = 79900 });
-            //list.Add(new Product { Id = 2, Name = "Galaxy S8", Company = "Samsung", Price = 49900 });
-            //list.Add(new Product { Id = 3, Name = "Pixel 2", Company = "Google", Price = 52900 });
+            _context = context;
         }
+
         [HttpGet]
         public IEnumerable<Product> Get()
         {
-            //list.Add(new Product { Id = 1, Name = "iPhone X", Company = "Apple", Price = 79900 });
-            //list.Add(new Product { Id = 2, Name = "Galaxy S8", Company = "Samsung", Price = 49900 });
-            //list.Add(new Product { Id = 3, Name = "Pixel 2", Company = "Google", Price = 52900 });
             return list;
         }
 
-        [HttpGet("{id}")]
-        public Product Get(int id)
+        [HttpGet("{id:int}")]
+        public IActionResult ShowAngular(int id)
         {
-            Product product = list.FirstOrDefault(x => x.Id == id);
-            return product;
+            list = GetItems(id);
+            return Redirect("/angular");
         }
 
-        //[HttpPost]
-        //public IActionResult Post(Product product)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        list.Add(product);
-        //        return Ok(product);
-        //    }
-        //    return BadRequest(ModelState);
-        //}
-
-        [HttpPut]
-        public IActionResult Put(Product product)
+        private List<Product> GetItems(int id)
         {
-            if (ModelState.IsValid)
-            {
-                return Ok(product);
-            }
-            return BadRequest(ModelState);
-        }
-
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
-        {
-            Product product = list.FirstOrDefault(x => x.Id == id);
-            if (product != null)
-            {
-                list.Remove(product);
-            }
-            return Ok(product);
-        }
-
-        [HttpPost]
-        public IActionResult ShowAngular(string urlSource)
-        {
-            //list = GetItems(urlSource);
-            return Ok(urlSource);
-            //return Redirect("/angular");
-        }
-
-        private List<Product> GetItems(string url)
-        {
-            var list = GetSyndicationItems(url);
+            var feed = _context.Feeds.Find(id);
+            var list = GetSyndicationItems(feed.Url);
             return CreateItemsList(list);
         }
 
@@ -104,31 +62,6 @@ namespace Phytime.Controllers
             return itemsList;
         }
     }
-
-    //[ApiController]
-    //[Route("api/items")]
-    //public class ItemsController : Controller
-    //{
-    //    [HttpGet]
-    //    public IEnumerable<Item> Get()
-    //    {
-    //        var list = new List<Item>();
-    //        list.Add(new Item() { Title = "title1", PublishDate = "date1", Summary = "summary1" });
-    //        list.Add(new Item() { Title = "title2", PublishDate = "date2", Summary = "summary2" });
-    //        return list;
-    //    }
-
-    //    //[HttpGet]
-    //    //public IEnumerable<Item> GetSome()
-    //    //{
-    //    //    var list = new List<Item>();
-    //    //    list.Add(new Item() { Title = "title3", PublishDate = "date3", Summary = "summary3" });
-    //    //    list.Add(new Item() { Title = "title4", PublishDate = "date4", Summary = "summary4" });
-    //    //    return list;
-    //    //}
-    //}
-
-
 }
 
 namespace Phytime.Models
