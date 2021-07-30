@@ -12,7 +12,7 @@ namespace Phytime.Controllers
     public class ItemsController : Controller
     {
         private readonly PhytimeContext _context;
-        public static List<Item> list /*= new List<Product>()*/;
+        private const string SessionListItemsKey = "items";
         public ItemsController(PhytimeContext context)
         {
             _context = context;
@@ -21,13 +21,15 @@ namespace Phytime.Controllers
         [HttpGet]
         public IEnumerable<Item> Get()
         {
-            return list;
+            return HttpContext.Session.GetComplexData<List<Item>>(SessionListItemsKey);
         }
 
         [HttpGet("{id:int}")]
         public IActionResult ShowAngular(int id)
         {
-            list = GetItems(id);
+            var list = GetItems(id);
+            HttpContext.Session.Remove(SessionListItemsKey);
+            HttpContext.Session.SetComplexData(SessionListItemsKey, list);
             return Redirect("/angular");
         }
 

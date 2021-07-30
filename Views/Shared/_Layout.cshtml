@@ -13,7 +13,7 @@
             <div>
                 @if (ViewBag.Login as string != null)
                 {
-                    <p>Current user: @ViewBag.Login</p>
+                    <p><b>Current user:</b> @ViewBag.Login</p>
                     @Html.ActionLink("Logout", "Logout")
                 }
                 else
@@ -24,7 +24,6 @@
         </div>
     </nav>
     <hr />
-    <!--основной контент-->
     <div class="container body-content">
         @RenderBody()
         <hr />
