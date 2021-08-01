@@ -1,0 +1,22 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using Phytime.ViewModels;
+@model TestModel;
+@{
+    ViewBag.Title = "Test";
+}
+
+<form asp-action="CheckTest" asp-controller="Test">
+    @for (int i = 0; i < Model.Questions.Count; i++)
+    {
+        <p>@string.Format("{0}. {1}", i + 1, Model.Questions.ElementAt(i).Value.question)</p>
+        @foreach (var answer in Model.Questions.ElementAt(i).Value.GetShuffledAnswers())
+        {
+            @Html.RadioButton("Model.Answers[" + Model.Questions.ElementAt(i).Key + "]", answer, false) @answer
+        }
+        <br />
+    }
+    <input type="submit" value="Submit" />
+</form>
+
+
+
