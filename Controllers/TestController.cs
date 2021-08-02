@@ -18,7 +18,6 @@ namespace Phytime.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            ViewBag.Login = HttpContext.User.Identity.Name;
             return View();
         }
 

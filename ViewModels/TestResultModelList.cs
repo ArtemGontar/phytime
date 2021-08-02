@@ -5,6 +5,11 @@ namespace Phytime.ViewModels
 {
     public class TestResultModelList
     {
+        public TestResultModelList()
+        {
+            List = new List<TestResultModel>();
+        }
+
         public List<TestResultModel> List { get; private set; }
         public int Points { get; private set; }
 

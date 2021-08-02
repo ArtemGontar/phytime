@@ -16,7 +16,6 @@ namespace Phytime.Controllers
         [Authorize]
         public IActionResult Index()
         {
-            ViewBag.Login = HttpContext.User.Identity.Name;
             return View(_rssSource);
         }
 

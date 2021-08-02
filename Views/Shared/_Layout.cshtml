@@ -8,7 +8,7 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light ">
-        <a class="navbar-brand" href="home">Phytime</a>
+        <a class="navbar-brand" href="../home">Phytime</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -16,16 +16,16 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="home">Home</a>
+                    <a class="nav-link" href="../home">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="test">Tests</a>
+                    <a class="nav-link" href="../test">Tests</a>
                 </li>
             </ul>
             <div class="my-2 my-lg-0">
-                @if (ViewBag.Login as string != null)
+                @if (User.Identity.Name as string != null)
                 {
-                    <p><b>Current user:</b> @ViewBag.Login</p>
+                    <p><b>Current user:</b> @User.Identity.Name</p>
                     @Html.ActionLink("Logout", "Logout")
                 }
                 else

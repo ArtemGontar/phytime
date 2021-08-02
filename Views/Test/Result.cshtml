@@ -3,7 +3,7 @@
 @foreach(var result in Model.List)
 { 
     <p>
-        @result.Number Your answer: @result.Answer Right answer: @result.RightAnswer
+        @result.Number Your answer: @result.Answer <b>|</b> Right answer: @result.RightAnswer
     </p>
 }
 <b>Your result: @Model.Points / @Model.List.Count</b>

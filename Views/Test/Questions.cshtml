@@ -13,6 +13,7 @@
         @foreach (var answer in Model.Questions.ElementAt(i).Value.GetShuffledAnswers())
         {
             @Html.RadioButton("Model.Answers[" + Model.Questions.ElementAt(i).Key + "]", answer, false) @answer
+            <br />
         }
         <br />
     }
