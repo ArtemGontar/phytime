@@ -13,6 +13,7 @@ namespace Phytime.Controllers
     public class TestController : Controller
     {
         private const int QuestionsCategory = 9;
+        private const string SessionTestModelKey = "testModel";
 
         [HttpGet]
         public IActionResult Index()
@@ -35,22 +36,27 @@ namespace Phytime.Controllers
             for (int i = 0; i < questions.results.Count; i++)
             {
                 testModel.Add($"question{i}", questions.results[i]);
-                testModel.Correct.Add($"question{i}", questions.results[i].correct_answer);
             }
+            HttpContext.Session.SetComplexData(SessionTestModelKey, testModel);
             return View("Questions", testModel);
         }
 
         public IActionResult CheckTest(TestModel model)
         {
-            int points = 0;
-            foreach (var answer in model.Answers)
+            var originalTestmodel = HttpContext.Session.GetComplexData<TestModel>(SessionTestModelKey);
+            var resultModelList = new TestResultModelList();
+            for(int i = 0; i < model.Answers.Count; i++)
             {
-                if (model.Answers[answer.Key] == model.Questions[answer.Key].correct_answer)
+                var resultModel = new TestResultModel()
                 {
-                    points++;
-                }
+                    Number = i + 1,
+                    Answer = model.Answers[model.Answers.ElementAt(i).Key],
+                    RightAnswer = originalTestmodel.Questions[model.Answers.ElementAt(i).Key].correct_answer,
+
+                };
+                resultModelList.Add(resultModel);
             }
-            return Ok(points);
+            return View("Result", resultModelList);
         }
     }
 }

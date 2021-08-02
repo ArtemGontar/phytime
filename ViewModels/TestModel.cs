@@ -9,10 +9,8 @@ namespace Phytime.ViewModels
         {
             Answers = new Dictionary<string, string>();
             Questions = new Dictionary<string, Question>();
-            Correct = new Dictionary<string, string>();
         }
         public Dictionary<string, string> Answers { get; set; }
-        public Dictionary<string, string> Correct { get; set; }
         public Dictionary<string, Question> Questions { get; set; }
         public TestModel Add(string key, Question value)
         {
