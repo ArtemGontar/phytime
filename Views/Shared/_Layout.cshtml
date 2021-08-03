@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
 </head>
 <body>
-<<<<<<< HEAD
     <nav class="navbar navbar-expand-lg navbar-light bg-light ">
         <a class="navbar-brand" href="../home">Phytime</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,15 +26,6 @@
                 @if (User.Identity.Name as string != null)
                 {
                     <p><b>Current user:</b> @User.Identity.Name</p>
-=======
-    <!--меню-->
-    <nav class="navbar navbar-inverse">
-        <div class="container">
-            <div>
-                @if (ViewBag.Login as string != null)
-                {
-                    <p>Current user: @ViewBag.Login</p>
->>>>>>> 03436020527dea8a234f10a1cff9c93daa27112e
                     @Html.ActionLink("Logout", "Logout")
                 }
                 else
@@ -45,12 +35,7 @@
             </div>
         </div>
     </nav>
-<<<<<<< HEAD
     <br />
-=======
-    <hr />
-    <!--основной контент-->
->>>>>>> 03436020527dea8a234f10a1cff9c93daa27112e
     <div class="container body-content">
         @RenderBody()
         <hr />
@@ -60,10 +45,6 @@
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
-<<<<<<< HEAD
-=======
-
->>>>>>> 03436020527dea8a234f10a1cff9c93daa27112e
         @RenderSection("Scripts", required: false)
     </div>
 </body>
