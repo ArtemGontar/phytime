@@ -14,6 +14,10 @@ namespace Phytime.Services
         {
             var comparer = new DateComparer<SyndicationItem>();
             list.Sort(comparer);
+<<<<<<< HEAD
+=======
+            //return list;
+>>>>>>> 03436020527dea8a234f10a1cff9c93daa27112e
         }
 
         private void SortByOldest(ref List<SyndicationItem> list)
@@ -21,6 +25,10 @@ namespace Phytime.Services
             var comparer = new DateComparer<SyndicationItem>();
             list.Sort(comparer);
             list.Reverse();
+<<<<<<< HEAD
+=======
+            //return list;
+>>>>>>> 03436020527dea8a234f10a1cff9c93daa27112e
         }
 
         public void SortFeed(string sortType, ref List<SyndicationItem> list)

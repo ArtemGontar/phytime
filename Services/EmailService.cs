@@ -31,7 +31,11 @@ namespace Phytime.Services
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
+<<<<<<< HEAD
             _timer = new Timer(CheckUrls, null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(60));
+=======
+            _timer = new Timer(CheckUrls, null, TimeSpan.FromSeconds(20), TimeSpan.FromSeconds(60));
+>>>>>>> 03436020527dea8a234f10a1cff9c93daa27112e
 
             return Task.CompletedTask;
         }
@@ -52,6 +56,7 @@ namespace Phytime.Services
         {
             using (var scope = _scopeFactory.CreateScope())
             {
+<<<<<<< HEAD
                 using (var context = scope.ServiceProvider.GetRequiredService<PhytimeContext>())
                 {
                     foreach (var url in _rssSource.Urls)
@@ -74,6 +79,28 @@ namespace Phytime.Services
                             context.SaveChanges();
                         }
                     }
+=======
+                PhytimeContext _context = scope.ServiceProvider.GetRequiredService<PhytimeContext>();
+                foreach (var url in _rssSource.Urls)
+                {
+                    XmlReader reader = XmlReader.Create(url);
+                    SyndicationFeed feed = SyndicationFeed.Load(reader);
+                    reader.Close();
+                    var rssFeed = _context.Feeds.FirstOrDefault(f => f.Url == url);
+                    if (rssFeed != null)
+                    {
+                        if (rssFeed.ItemsCount != feed.Items.ToList().Count)
+                        {
+                            SendNotifications(url, _rssSource.Titles[_rssSource.Urls.IndexOf(url)]);
+                        }
+                    }
+                    //needs to be moved to new class
+                    else
+                    {
+                        _context.Feeds.Add(new Feed { Url = url, ItemsCount = feed.Items.ToList().Count });
+                        _context.SaveChanges();
+                    }
+>>>>>>> 03436020527dea8a234f10a1cff9c93daa27112e
                 }
             }
         }

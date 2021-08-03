@@ -5,6 +5,7 @@
 @{
     ViewBag.Title = "RssFeed";
 }
+<<<<<<< HEAD
 <div style="margin-bottom: 10px;">
     @if (ViewBag.Subscribed)
     {
@@ -17,6 +18,17 @@
     <a href="@Url.Action("ChangeOrder", "Feed")" class="btn btn-sm btn-primary">Change order</a>
     <a href="@string.Format("../api/items/showangular/{0}", Model.Id)" target="_blank" class="btn btn-sm btn-primary">Show in angular</a>
 </div>
+=======
+@if (ViewBag.Subscribed)
+{
+    <a href="@Url.Action("Unsubscribe", "Feed", new { url = Model.Url })">Unsubscribe</a>
+}
+else
+{
+    <a href="@Url.Action("Subscribe", "Feed", new { url = Model.Url })">Subscribe</a>
+}
+<a href="@Url.Action("ChangeOrder", "Feed")">Change order</a>
+>>>>>>> 03436020527dea8a234f10a1cff9c93daa27112e
 @using (Html.BeginForm("RssFeed", "Feed", new { url = Model.Url, page = 1 }))
 {
     @Html.DropDownList("SortValue", new List<SelectListItem>
@@ -32,12 +44,22 @@
 <hr />
 @foreach (SyndicationItem item in Model.SyndicationItems)
 {
+<<<<<<< HEAD
+=======
+    @*<h3>@item.Title.Text</h3>
+        <p>@item.Summary.Text</p>*@
+>>>>>>> 03436020527dea8a234f10a1cff9c93daa27112e
     <div>
         <a href="@item.Links[0].Uri.ToString()">
             @item.Title.Text
         </a>
+<<<<<<< HEAD
         <ins>@item.PublishDate.ToString("D")</ins>
 </div>
+=======
+        <span>@item.PublishDate.ToString("D")</span>
+    </div>
+>>>>>>> 03436020527dea8a234f10a1cff9c93daa27112e
     <div>
         <p>
             @item.Summary.Text

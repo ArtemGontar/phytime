@@ -2,10 +2,17 @@
   "version": "1.0.0",
   "name": "asp.net",
   "private": true,
+<<<<<<< HEAD
   "author": "Phytime",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+=======
+  "author": "Eugene Popov <metanit.com>",
+  "scripts": {
+    "ng": "ng",
+    "start": "echo hello && ng serve",
+>>>>>>> 03436020527dea8a234f10a1cff9c93daa27112e
     "build": "ng build"
   },
   "dependencies": {
