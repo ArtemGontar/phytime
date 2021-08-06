@@ -17,6 +17,8 @@ namespace Phytime.Controllers
         private PhytimeContext _context => (PhytimeContext)HttpContext.RequestServices.GetService(typeof(PhytimeContext));
         private readonly IConfiguration _config;
 
+        public FeedController() { }
+
         public FeedController(IConfiguration config)
         {
             _config = config;
@@ -41,7 +43,7 @@ namespace Phytime.Controllers
             return View(rssFeed);
         }
 
-        private List<SyndicationItem> GetSyndicationItems(string url)
+        public List<SyndicationItem> GetSyndicationItems(string url)
         {
             XmlReader reader = XmlReader.Create(url);
             SyndicationFeed feed = SyndicationFeed.Load(reader);
