@@ -9,6 +9,10 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Configuration;
 using Phytime.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace Phytime
 {
@@ -27,23 +31,28 @@ namespace Phytime
             services.AddDbContext<PhytimeContext>(options => options.UseSqlServer(connection));
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options => //CookieAuthenticationOptions
+                .AddCookie(options =>
                 {
                     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
                 });
 
-            services.AddMvc();
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+
+            services.AddDistributedMemoryCache();
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddSingleton<EmailService>(x =>
                 new EmailService(x.GetRequiredService<IServiceScopeFactory>(),
                 x.GetRequiredService<IConfiguration>()));
 
             services.AddHostedService<EmailService>();
-
-            //services.AddSpaStaticFiles(configuration =>
-            //{
-            //    configuration.RootPath = "ClientApp/dist";
-            //});
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -57,29 +66,27 @@ namespace Phytime
             {
                 app.UseSpaStaticFiles();
             }
-
+            app.UseDeveloperExceptionPage();
+            app.UseStatusCodePages();
+            app.UseStaticFiles();
             app.UseRouting();
-
-            app.UseAuthentication();   
+            app.UseAuthentication();
             app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
+            app.UseEndpoints(routes =>
             {
-                endpoints.MapControllerRoute(
+                routes.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "ClientApp";
 
-            //app.UseSpa(spa =>
-            //{
-            //    spa.Options.SourcePath = "ClientApp";
-
-            //    if (env.IsDevelopment())
-            //    {
-            //        spa.UseAngularCliServer(npmScript: "start");
-            //        //spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
-            //    }
-            //});
+                if (env.IsDevelopment())
+                {
+                    spa.UseAngularCliServer(npmScript: "start");
+                }
+            });
         }
     }
 }

@@ -5,15 +5,19 @@
 @{
     ViewBag.Title = "RssFeed";
 }
-@if (ViewBag.Subscribed)
-{
-    <a href="@Url.Action("Unsubscribe", "Feed", new { url = Model.Url })">Unsubscribe</a>
-}
-else
-{
-    <a href="@Url.Action("Subscribe", "Feed", new { url = Model.Url })">Subscribe</a>
-}
-<a href="@Url.Action("ChangeOrder", "Feed")">Change order</a>
+<div style="margin-bottom: 10px;">
+    @if (ViewBag.Subscribed)
+    {
+        <a href="@Url.Action("Unsubscribe", "Feed", new { url = Model.Url })" class="btn btn-sm btn-danger">Unsubscribe</a>
+    }
+    else
+    {
+        <a href="@Url.Action("Subscribe", "Feed", new { url = Model.Url })" class="btn btn-sm btn-success">Subscribe</a>
+    }
+    <a href="@Url.Action("ChangeOrder", "Feed")" class="btn btn-sm btn-primary">Change order</a>
+    <a href="@Url.Action("ShowAngular", "Feed", new { id = Model.Id })" class="btn btn-sm btn-primary">Show in angular</a>
+    @*<a href="@string.Format("../api/items/{0}", Model.Id)" target="_blank" class="btn btn-sm btn-primary">Show in angular</a>*@
+</div>
 @using (Html.BeginForm("RssFeed", "Feed", new { url = Model.Url, page = 1 }))
 {
     @Html.DropDownList("SortValue", new List<SelectListItem>
@@ -29,14 +33,12 @@ else
 <hr />
 @foreach (SyndicationItem item in Model.SyndicationItems)
 {
-    @*<h3>@item.Title.Text</h3>
-        <p>@item.Summary.Text</p>*@
     <div>
         <a href="@item.Links[0].Uri.ToString()">
             @item.Title.Text
         </a>
-        <span>@item.PublishDate.ToString("D")</span>
-    </div>
+        <ins>@item.PublishDate.ToString("D")</ins>
+</div>
     <div>
         <p>
             @item.Summary.Text

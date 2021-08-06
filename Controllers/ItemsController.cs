@@ -1,49 +1,53 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Phytime.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel.Syndication;
-using System.Threading.Tasks;
 using System.Xml;
-using Phytime.Services;
-
-//***********************************Testing angular here**************
 
 namespace Phytime.Controllers
 {
     [ApiController]
-    [Route("api/items")]
+    [Route("api/[controller]")]
     public class ItemsController : Controller
     {
-        [HttpGet]
-        public IEnumerable<Item> Get()
+        private readonly PhytimeContext _context;
+        private const string SessionListItemsKey = "items";
+        public ItemsController(PhytimeContext context)
         {
-            var list = new List<Item>();
-            list.Add(new Item() { Title = "title1", PublishDate = "date1", Summary = "summary1" });
-            list.Add(new Item() { Title = "title2", PublishDate = "date2", Summary = "summary2" });
-            return list;
+            _context = context;
         }
 
-        [HttpGet]
-        public IEnumerable<Item> GetSome()
+        [HttpGet("{id:int}")]
+        public IEnumerable<Item> Get(int id)
         {
-            var list = new List<Item>();
-            list.Add(new Item() { Title = "title3", PublishDate = "date3", Summary = "summary3" });
-            list.Add(new Item() { Title = "title4", PublishDate = "date4", Summary = "summary4" });
-            return list;
+            return GetItems(id);
         }
-    }
 
-    
-}
+        private List<Item> GetItems(int id)
+        {
+            var feed = _context.Feeds.Find(id);
+            var list = GetSyndicationItems(feed.Url);
+            return CreateItemsList(list);
+        }
 
-namespace Phytime.Models
-{
-    public class Item
-    {
-        public string Title { get; set; }
-        public string PublishDate { get; set; }
-        public string Summary { get; set; }
+        private List<SyndicationItem> GetSyndicationItems(string url)
+        {
+            XmlReader reader = XmlReader.Create(url);
+            SyndicationFeed feed = SyndicationFeed.Load(reader);
+            reader.Close();
+            return feed.Items.ToList();
+        }
+
+        private List<Item> CreateItemsList(List<SyndicationItem> list)
+        {
+            var itemsList = new List<Item>();
+            foreach(var item in list)
+            {
+                itemsList.Add(new Item { Title = item.Title.Text, 
+                    Summary = item.Summary.Text, Publishdate = item.PublishDate.ToString("D") });
+            }
+            return itemsList;
+        }
     }
 }

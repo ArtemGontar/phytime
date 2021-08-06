@@ -24,7 +24,6 @@ namespace Phytime.Controllers
 
         public ActionResult RssFeed(string url, int page)
         {
-            ViewBag.Login = HttpContext.User.Identity.Name;
             ViewBag.Subscribed = IsSubscribed(url);
             var feedItems = GetSyndicationItems(url);
             if(Request.HasFormContentType)
@@ -36,7 +35,9 @@ namespace Phytime.Controllers
             int pageSize = int.Parse(_config["FeedPageInfo:pageSize"]);
             IEnumerable<SyndicationItem> itemsPerPages = feedItems.Skip((page - 1) * pageSize).Take(pageSize);
             PageInfo pageInfo = new PageInfo { PageNumber = page, PageSize = pageSize, TotalItems = feedItems.Count };
-            Feed rssFeed = new Feed { Url = url, PageInfo = pageInfo, SyndicationItems = itemsPerPages };
+            Feed rssFeed = _context.Feeds.FirstOrDefault(feed => feed.Url == url);
+            rssFeed.PageInfo = pageInfo;
+            rssFeed.SyndicationItems = itemsPerPages;
             return View(rssFeed);
         }
 
@@ -78,6 +79,10 @@ namespace Phytime.Controllers
         public RedirectResult Logout()
         {
             return Redirect("/Account/Logout");
+        }
+        public IActionResult ShowAngular(int id)
+        {
+            return Redirect($"/angular/{id}");
         }
 
     }

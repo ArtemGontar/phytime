@@ -31,7 +31,7 @@ namespace Phytime.Services
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            _timer = new Timer(CheckUrls, null, TimeSpan.FromSeconds(20), TimeSpan.FromSeconds(60));
+            _timer = new Timer(CheckUrls, null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(60));
 
             return Task.CompletedTask;
         }
@@ -52,25 +52,27 @@ namespace Phytime.Services
         {
             using (var scope = _scopeFactory.CreateScope())
             {
-                PhytimeContext _context = scope.ServiceProvider.GetRequiredService<PhytimeContext>();
-                foreach (var url in _rssSource.Urls)
+                using (var context = scope.ServiceProvider.GetRequiredService<PhytimeContext>())
                 {
-                    XmlReader reader = XmlReader.Create(url);
-                    SyndicationFeed feed = SyndicationFeed.Load(reader);
-                    reader.Close();
-                    var rssFeed = _context.Feeds.FirstOrDefault(f => f.Url == url);
-                    if (rssFeed != null)
+                    foreach (var url in _rssSource.Urls)
                     {
-                        if (rssFeed.ItemsCount != feed.Items.ToList().Count)
+                        XmlReader reader = XmlReader.Create(url);
+                        SyndicationFeed feed = SyndicationFeed.Load(reader);
+                        reader.Close();
+                        var rssFeed = context.Feeds.FirstOrDefault(f => f.Url == url);
+                        if (rssFeed != null)
                         {
-                            SendNotifications(url, _rssSource.Titles[_rssSource.Urls.IndexOf(url)]);
+                            if (rssFeed.ItemsCount != feed.Items.ToList().Count)
+                            {
+                                SendNotifications(url, _rssSource.Titles[_rssSource.Urls.IndexOf(url)]);
+                            }
                         }
-                    }
-                    //needs to be moved to new class
-                    else
-                    {
-                        _context.Feeds.Add(new Feed { Url = url, ItemsCount = feed.Items.ToList().Count });
-                        _context.SaveChanges();
+                        //needs to be moved to new class
+                        else
+                        {
+                            context.Feeds.Add(new Feed { Url = url, ItemsCount = feed.Items.ToList().Count });
+                            context.SaveChanges();
+                        }
                     }
                 }
             }

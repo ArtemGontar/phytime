@@ -7,14 +7,26 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
 </head>
 <body>
-    <!--меню-->
-    <nav class="navbar navbar-inverse">
-        <div class="container">
-            <div>
-                @if (ViewBag.Login as string != null)
+    <nav class="navbar navbar-expand-lg navbar-light bg-light ">
+        <a class="navbar-brand" href="../home">Phytime</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="../home">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../test">Tests</a>
+                </li>
+            </ul>
+            <div class="my-2 my-lg-0">
+                @if (User.Identity.Name as string != null)
                 {
-                    <p>Current user: @ViewBag.Login</p>
-                    @Html.ActionLink("Logout", "Logout")
+                    <p><b>Current user:</b> @User.Identity.Name</p>
+                    @Html.ActionLink("Logout", "Logout", "Feed")
                 }
                 else
                 {
@@ -23,8 +35,7 @@
             </div>
         </div>
     </nav>
-    <hr />
-    <!--основной контент-->
+    <br />
     <div class="container body-content">
         @RenderBody()
         <hr />
@@ -34,7 +45,6 @@
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
-
         @RenderSection("Scripts", required: false)
     </div>
 </body>

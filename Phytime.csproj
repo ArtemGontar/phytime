@@ -35,7 +35,9 @@
     <None Remove="ClientApp\src\app.component.ts" />
     <None Remove="ClientApp\src\app\app.module.ts" />
     <None Remove="ClientApp\src\app\data.service.ts" />
+    <None Remove="ClientApp\src\app\item-list.component.ts" />
     <None Remove="ClientApp\src\app\item.ts" />
+    <None Remove="ClientApp\src\app\not-found.component.ts" />
     <None Remove="ClientApp\src\environments\environment.prod.ts" />
     <None Remove="ClientApp\src\environments\environment.ts" />
     <None Remove="ClientApp\src\main.ts" />
