@@ -11,7 +11,7 @@ import { NotFoundComponent } from './not-found.component';
 import { DataService } from './data.service';
 
 const appRoutes: Routes = [
-    { path: 'angular', component: ItemListComponent },
+    { path: 'angular/:id', component: ItemListComponent },
     { path: '**', component: NotFoundComponent }
 ];
 

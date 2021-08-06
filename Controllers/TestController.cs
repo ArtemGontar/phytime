@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Phytime.Models;
 using Phytime.ViewModels;
 using System;
@@ -13,7 +14,12 @@ namespace Phytime.Controllers
     public class TestController : Controller
     {
         private const int QuestionsCategory = 9;
-        private const string SessionTestModelKey = "testModel";
+        private readonly IConfiguration _config;
+
+        public TestController(IConfiguration config)
+        {
+            _config = config;
+        }
 
         [HttpGet]
         public IActionResult Index()
@@ -24,7 +30,7 @@ namespace Phytime.Controllers
         public IActionResult StartTest(int count, string difficulty, string type)
         {
             Questions questions = null;
-            string url = $"https://opentdb.com/api.php?" +
+            string url = _config["Links:test"] +
                 $"amount={count}&category={QuestionsCategory}&difficulty={difficulty}&type={type}";
             using (WebClient wc = new WebClient())
             {
@@ -36,22 +42,19 @@ namespace Phytime.Controllers
             {
                 testModel.Add($"question{i}", questions.results[i]);
             }
-            HttpContext.Session.SetComplexData(SessionTestModelKey, testModel);
             return View("Questions", testModel);
         }
 
         public IActionResult CheckTest(TestModel model)
         {
-            var originalTestmodel = HttpContext.Session.GetComplexData<TestModel>(SessionTestModelKey);
             var resultModelList = new TestResultModelList();
-            for(int i = 0; i < model.Answers.Count; i++)
+            for (int i = 0; i < model.Answers.Count; i++)
             {
                 var resultModel = new TestResultModel()
                 {
                     Number = i + 1,
                     Answer = model.Answers[model.Answers.ElementAt(i).Key],
-                    RightAnswer = originalTestmodel.Questions[model.Answers.ElementAt(i).Key].correct_answer,
-
+                    RightAnswer = model.RightAnswers[model.Answers.ElementAt(i).Key]
                 };
                 resultModelList.Add(resultModel);
             }

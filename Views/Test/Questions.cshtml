@@ -4,14 +4,14 @@
 @{
     ViewBag.Title = "Test";
 }
-
+@{TempData["Data1"] = "asa";}
 <form asp-action="CheckTest" asp-controller="Test">
     @for (int i = 0; i < Model.Questions.Count; i++)
     {
-        @Html.HiddenFor(m => m.Questions.ElementAt(i).Value)
         <p>@string.Format("{0}. {1}", i + 1, Model.Questions.ElementAt(i).Value.question)</p>
         @foreach (var answer in Model.Questions.ElementAt(i).Value.GetShuffledAnswers())
         {
+            @Html.Hidden("Model.RightAnswers[" + Model.Questions.ElementAt(i).Key + "]", Model.Questions.ElementAt(i).Value.correct_answer, false)
             @Html.RadioButton("Model.Answers[" + Model.Questions.ElementAt(i).Key + "]", answer, false) @answer
             <br />
         }

@@ -80,6 +80,10 @@ namespace Phytime.Controllers
         {
             return Redirect("/Account/Logout");
         }
+        public IActionResult ShowAngular(int id)
+        {
+            return Redirect($"/angular/{id}");
+        }
 
     }
 }

@@ -5,12 +5,12 @@ import { Item } from './item';
 @Injectable()
 export class DataService {
 
-    private url = "/api/items/";
+    private url = "/api/items";
 
     constructor(private http: HttpClient) {
     }
 
-    getItems() {
-        return this.http.get(this.url + 'get');
+    getItems(id: number) {
+        return this.http.get(this.url + '/' + id);
     }
 }

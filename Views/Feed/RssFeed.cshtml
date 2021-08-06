@@ -15,7 +15,8 @@
         <a href="@Url.Action("Subscribe", "Feed", new { url = Model.Url })" class="btn btn-sm btn-success">Subscribe</a>
     }
     <a href="@Url.Action("ChangeOrder", "Feed")" class="btn btn-sm btn-primary">Change order</a>
-    <a href="@string.Format("../api/items/showangular/{0}", Model.Id)" target="_blank" class="btn btn-sm btn-primary">Show in angular</a>
+    <a href="@Url.Action("ShowAngular", "Feed", new { id = Model.Id })" class="btn btn-sm btn-primary">Show in angular</a>
+    @*<a href="@string.Format("../api/items/{0}", Model.Id)" target="_blank" class="btn btn-sm btn-primary">Show in angular</a>*@
 </div>
 @using (Html.BeginForm("RssFeed", "Feed", new { url = Model.Url, page = 1 }))
 {

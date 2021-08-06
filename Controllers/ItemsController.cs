@@ -8,7 +8,7 @@ using System.Xml;
 namespace Phytime.Controllers
 {
     [ApiController]
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     public class ItemsController : Controller
     {
         private readonly PhytimeContext _context;
@@ -18,19 +18,10 @@ namespace Phytime.Controllers
             _context = context;
         }
 
-        [HttpGet]
-        public IEnumerable<Item> Get()
-        {
-            return HttpContext.Session.GetComplexData<List<Item>>(SessionListItemsKey);
-        }
-
         [HttpGet("{id:int}")]
-        public IActionResult ShowAngular(int id)
+        public IEnumerable<Item> Get(int id)
         {
-            var list = GetItems(id);
-            HttpContext.Session.Remove(SessionListItemsKey);
-            HttpContext.Session.SetComplexData(SessionListItemsKey, list);
-            return Redirect("/angular");
+            return GetItems(id);
         }
 
         private List<Item> GetItems(int id)
