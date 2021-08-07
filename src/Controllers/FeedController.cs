@@ -17,12 +17,17 @@ namespace Phytime.Controllers
         private PhytimeContext _context => (PhytimeContext)HttpContext.RequestServices.GetService(typeof(PhytimeContext));
         private readonly IConfiguration _config;
 
-        public FeedController() { }
+        //public FeedController() { }
 
         public FeedController(IConfiguration config)
         {
             _config = config;
         }
+
+        //public FeedController(PhytimeContext context)
+        //{
+        //    _context = context;
+        //}
 
         public ActionResult RssFeed(string url, int page)
         {

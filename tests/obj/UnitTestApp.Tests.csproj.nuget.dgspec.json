@@ -133,6 +133,10 @@
               "target": "Package",
               "version": "[16.10.0, )"
             },
+            "Moq": {
+              "target": "Package",
+              "version": "[4.16.1, )"
+            },
             "xunit": {
               "target": "Package",
               "version": "[2.4.1, )"
