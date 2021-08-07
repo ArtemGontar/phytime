@@ -14,20 +14,17 @@ namespace Phytime.Controllers
 {
     public class FeedController : Controller
     {
-        private PhytimeContext _context => (PhytimeContext)HttpContext.RequestServices.GetService(typeof(PhytimeContext));
+        private PhytimeContext _context;// = (PhytimeContext)HttpContext.RequestServices.GetService(typeof(PhytimeContext));
         private readonly IConfiguration _config;
-
-        //public FeedController() { }
 
         public FeedController(IConfiguration config)
         {
             _config = config;
+            string connection = _config.GetConnectionString("DefaultConnection");
+            var options = new DbContextOptionsBuilder<PhytimeContext>();
+            options.UseSqlServer(connection);
+            _context = new PhytimeContext(options.Options);
         }
-
-        //public FeedController(PhytimeContext context)
-        //{
-        //    _context = context;
-        //}
 
         public ActionResult RssFeed(string url, int page)
         {
@@ -56,7 +53,7 @@ namespace Phytime.Controllers
             return feed.Items.ToList();
         }
 
-        private bool IsSubscribed(string url)
+        public bool IsSubscribed(string url)
         {
             var contains = _context.Feeds.Include(c => c.Users).FirstOrDefault(feed => feed.Url == url)
                 .Users.Select(u => u.Email).Contains(HttpContext.User.Identity.Name);
@@ -87,10 +84,15 @@ namespace Phytime.Controllers
         {
             return Redirect("/Account/Logout");
         }
+
         public IActionResult ShowAngular(int id)
         {
             return Redirect($"/angular/{id}");
         }
 
+        public void SetContext(PhytimeContext context)
+        {
+            _context = context;
+        }
     }
 }

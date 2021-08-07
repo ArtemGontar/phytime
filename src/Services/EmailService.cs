@@ -31,7 +31,7 @@ namespace Phytime.Services
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            _timer = new Timer(CheckUrls, null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(60));
+            _timer = new Timer(CheckUrls, null, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(60));
 
             return Task.CompletedTask;
         }
@@ -52,7 +52,11 @@ namespace Phytime.Services
         {
             using (var scope = _scopeFactory.CreateScope())
             {
-                using (var context = scope.ServiceProvider.GetRequiredService<PhytimeContext>())
+                string connection = _config.GetConnectionString("DefaultConnection");
+                var options = new DbContextOptionsBuilder<PhytimeContext>();
+                options.UseSqlServer(connection);
+                using (var context = new PhytimeContext(options.Options))
+                //using (var context = scope.ServiceProvider.GetRequiredService<PhytimeContext>())
                 {
                     foreach (var url in _rssSource.Urls)
                     {
