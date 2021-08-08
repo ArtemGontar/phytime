@@ -14,16 +14,13 @@ namespace Phytime.Controllers
 {
     public class FeedController : Controller
     {
-        private PhytimeContext _context;// = (PhytimeContext)HttpContext.RequestServices.GetService(typeof(PhytimeContext));
         private readonly IConfiguration _config;
+        private readonly IRepository _repository;
 
-        public FeedController(IConfiguration config)
+        public FeedController(IConfiguration config, IRepository repository = null)
         {
             _config = config;
-            string connection = _config.GetConnectionString("DefaultConnection");
-            var options = new DbContextOptionsBuilder<PhytimeContext>();
-            options.UseSqlServer(connection);
-            _context = new PhytimeContext(options.Options);
+            _repository = repository ?? new PhytimeRepository(config);
         }
 
         public ActionResult RssFeed(string url, int page)
@@ -36,13 +33,19 @@ namespace Phytime.Controllers
                 var sorterer = new FeedSorterer();
                 sorterer.SortFeed(selectedSort, ref feedItems);
             }
-            int pageSize = int.Parse(_config["FeedPageInfo:pageSize"]);
-            IEnumerable<SyndicationItem> itemsPerPages = feedItems.Skip((page - 1) * pageSize).Take(pageSize);
-            PageInfo pageInfo = new PageInfo { PageNumber = page, PageSize = pageSize, TotalItems = feedItems.Count };
-            Feed rssFeed = _context.Feeds.FirstOrDefault(feed => feed.Url == url);
+            var rssFeed = FormFeed(url, page, feedItems);
+            return View(rssFeed);
+        }
+
+        public Feed FormFeed(string url, int page, List<SyndicationItem> items)
+        {
+            int pageSize = int.Parse(_config.GetSection("FeedPageInfo:pageSize").Value);
+            IEnumerable<SyndicationItem> itemsPerPages = items.Skip((page - 1) * pageSize).Take(pageSize);
+            PageInfo pageInfo = new PageInfo { PageNumber = page, PageSize = pageSize, TotalItems = items.Count };
+            Feed rssFeed = _repository.GetFeedByUrl(url);
             rssFeed.PageInfo = pageInfo;
             rssFeed.SyndicationItems = itemsPerPages;
-            return View(rssFeed);
+            return rssFeed;
         }
 
         public List<SyndicationItem> GetSyndicationItems(string url)
@@ -55,28 +58,24 @@ namespace Phytime.Controllers
 
         public bool IsSubscribed(string url)
         {
-            var contains = _context.Feeds.Include(c => c.Users).FirstOrDefault(feed => feed.Url == url)
-                .Users.Select(u => u.Email).Contains(HttpContext.User.Identity.Name);
-            return contains;
+            var feed = _repository.GetFeedByUrl(url);
+            var user = _repository.GetUserByEmail(HttpContext.User.Identity.Name);
+            return _repository.FeedContainsUser(feed, user);
         }
 
-        public async Task<IActionResult> Subscribe(string url)
+        public IActionResult Subscribe(string url)
         {
-            User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == HttpContext.User.Identity.Name);
-            var feed = new Feed() { Url = url };
-            Feed dbFeed = await _context.Feeds.FirstOrDefaultAsync(f => f.Url == url);
-            dbFeed.Users.Add(user);
-            await _context.SaveChangesAsync();
+            var feed = _repository.GetFeedByUrl(url);
+            var user = _repository.GetUserByEmail(HttpContext.User.Identity.Name);
+            _repository.AddUserToFeed(feed, user);
             return RedirectToAction("RssFeed", new { url = url, page = 1});
         }
 
-        public async Task<IActionResult> UnSubscribe(string url)
+        public IActionResult UnSubscribe(string url)
         {
-            User user = _context.Users.Include(user => user.Feeds)
-                .FirstOrDefault(user => user.Email == HttpContext.User.Identity.Name);
-            Feed dbFeed = await _context.Feeds.FirstOrDefaultAsync(feed => feed.Url == url);
-            user.Feeds.Remove(dbFeed);
-            _context.SaveChanges();
+            var feed = _repository.GetFeedByUrl(url);
+            var user = _repository.GetUserByEmail(HttpContext.User.Identity.Name);
+            _repository.RemoveUserFromFeed(feed, user);
             return RedirectToAction("RssFeed", new { url = url, page = 1 });
         }
 
@@ -90,9 +89,10 @@ namespace Phytime.Controllers
             return Redirect($"/angular/{id}");
         }
 
-        public void SetContext(PhytimeContext context)
+        protected override void Dispose(bool disposing)
         {
-            _context = context;
+            (_repository as PhytimeRepository).Dispose();
+            base.Dispose(disposing);
         }
     }
 }

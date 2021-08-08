@@ -4,7 +4,6 @@
 @{
     ViewBag.Title = "Test";
 }
-@{TempData["Data1"] = "asa";}
 <form asp-action="CheckTest" asp-controller="Test">
     @for (int i = 0; i < Model.Questions.Count; i++)
     {

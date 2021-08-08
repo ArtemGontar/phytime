@@ -4,29 +4,27 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Threading;
-using System.Collections.Generic;
 using Phytime.Models;
-using Microsoft.EntityFrameworkCore;
 using System.Xml;
 using System.ServiceModel.Syndication;
 using System.Linq;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
 
 namespace Phytime.Services
 {
     public class EmailService : IHostedService, IDisposable
     {
         private readonly RssSource _rssSource;
-        private readonly IServiceScopeFactory _scopeFactory;
         private readonly IConfiguration _config;
+        private readonly IRepository _repository;
         private Timer _timer;    
 
-        public EmailService(IServiceScopeFactory scopeFactory, IConfiguration config)
+        public EmailService(IConfiguration config, IRepository repository = null)
         {
             _rssSource = RssSource.getInstance();
-            _scopeFactory = scopeFactory;
             _config = config;
+            _repository = repository ?? new PhytimeRepository(config);
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -50,63 +48,59 @@ namespace Phytime.Services
 
         public void CheckUrls(object state)
         {
-            using (var scope = _scopeFactory.CreateScope())
+            foreach (var url in _rssSource.Urls)
             {
-                string connection = _config.GetConnectionString("DefaultConnection");
-                var options = new DbContextOptionsBuilder<PhytimeContext>();
-                options.UseSqlServer(connection);
-                using (var context = new PhytimeContext(options.Options))
-                //using (var context = scope.ServiceProvider.GetRequiredService<PhytimeContext>())
+                XmlReader reader = XmlReader.Create(url);
+                SyndicationFeed feed = SyndicationFeed.Load(reader);
+                reader.Close();
+                var rssFeed = _repository.GetFeedByUrl(url);
+                if (rssFeed != null)
                 {
-                    foreach (var url in _rssSource.Urls)
+                    if (rssFeed.ItemsCount != feed.Items.ToList().Count)
                     {
-                        XmlReader reader = XmlReader.Create(url);
-                        SyndicationFeed feed = SyndicationFeed.Load(reader);
-                        reader.Close();
-                        var rssFeed = context.Feeds.FirstOrDefault(f => f.Url == url);
-                        if (rssFeed != null)
-                        {
-                            if (rssFeed.ItemsCount != feed.Items.ToList().Count)
-                            {
-                                SendNotifications(url, _rssSource.Titles[_rssSource.Urls.IndexOf(url)]);
-                            }
-                        }
-                        //needs to be moved to new class
-                        else
-                        {
-                            context.Feeds.Add(new Feed { Url = url, ItemsCount = feed.Items.ToList().Count });
-                            context.SaveChanges();
-                        }
+                        var users = FindUsersToSend(rssFeed);
+                        SendNotifications(users, rssFeed);
                     }
                 }
-            }
-        }
-
-        public void SendNotifications(string feedUrl, string feedTitle)
-        {
-            using (var scope = _scopeFactory.CreateScope())
-            {
-                PhytimeContext _context = scope.ServiceProvider.GetRequiredService<PhytimeContext>();
-                var rssfeed = _context.Feeds.Include(f => f.Users).FirstOrDefault(f => f.Url == feedUrl);
-                foreach (var user in rssfeed.Users)
+                //needs to be moved to new class
+                else
                 {
-                    SendEmail(user.Email, "Records updated", feedTitle);
+                    _repository.Add(new Feed { Title = _rssSource.Titles[_rssSource.Urls.IndexOf(url)],
+                        Url = url, ItemsCount = feed.Items.ToList().Count });
                 }
             }
         }
 
-        public void SendEmail(string email, string subject, string message)
+        public List<User> FindUsersToSend(Feed feed)
+        {
+            return _repository.GetFeedIncudeUsers(feed).Users;
+        }
+
+        public void SendNotifications(List<User> users, Feed feed)
+        { 
+            foreach (var user in users)
+            {
+                var message = FormMessage(user.Email, "Records updated", feed.Title);
+                SendEmail(message);
+            }
+        }
+
+        public MimeMessage FormMessage(string email, string subject, string message)
         {
             var emailMessage = new MimeMessage();
-
-            emailMessage.From.Add(new MailboxAddress("Site administration", "localhosttest@yandex.by"));
+            emailMessage.From.Add(new MailboxAddress("Site administration", 
+                _config.GetSection("AdminEmailParametrs:email").Value));
             emailMessage.To.Add(new MailboxAddress("", email));
             emailMessage.Subject = subject;
             emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
             {
                 Text = message
             };
+            return emailMessage;
+        }
 
+        public void SendEmail(MimeMessage emailMessage)
+        {
             using (var client = new SmtpClient())
             {
                 client.Connect(_config["AdminEmailParametrs:smtp"], 

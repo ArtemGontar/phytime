@@ -49,7 +49,7 @@ namespace Phytime.Services
             DateTime currentDate = DateTime.Now;
             foreach (var item in list)
             {
-                if (currentDate.AddDays(-_WeekDaysCount) <= item.PublishDate)
+                if (item.PublishDate >= currentDate.AddDays(-_WeekDaysCount) )
                 {
                     newList.Add(item);
                 }
@@ -63,7 +63,7 @@ namespace Phytime.Services
             DateTime currentDate = DateTime.Now;
             foreach (var item in list)
             {
-                if (currentDate.AddDays(-_MonthDaysCount) >= item.PublishDate)
+                if (item.PublishDate >= currentDate.AddDays(-_MonthDaysCount))
                 {
                     newList.Add(item);
                 }

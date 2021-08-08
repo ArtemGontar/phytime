@@ -48,9 +48,9 @@ namespace Phytime
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            services.AddSingleton<EmailService>(x =>
-                new EmailService(x.GetRequiredService<IServiceScopeFactory>(),
-                x.GetRequiredService<IConfiguration>()));
+            //services.AddSingleton<EmailService>(x =>
+            //    new EmailService(x.GetRequiredService<IServiceScopeFactory>(),
+            //    x.GetRequiredService<IConfiguration>()));
 
             services.AddHostedService<EmailService>();
         }

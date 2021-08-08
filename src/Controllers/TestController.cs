@@ -30,7 +30,7 @@ namespace Phytime.Controllers
         public IActionResult StartTest(int count, string difficulty, string type)
         {
             Questions questions = null;
-            string url = _config["Links:test"] +
+            string url = _config.GetSection("Links:test").Value +
                 $"amount={count}&category={QuestionsCategory}&difficulty={difficulty}&type={type}";
             using (WebClient wc = new WebClient())
             {

@@ -7,17 +7,17 @@ using Phytime.ViewModels;
 using Phytime.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.Configuration;
 
 namespace Phytime.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly PhytimeContext _context;
+        private readonly IRepository _repository;
 
-        public AccountController(PhytimeContext context)
+        public AccountController(IConfiguration config, IRepository repository = null)
         {
-            _context = context;
+            _repository = repository ?? new PhytimeRepository(config);
         }
 
         [HttpGet]
@@ -32,7 +32,7 @@ namespace Phytime.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email && u.PasswordHash == model.Password);
+                User user = await _repository.GetUserAsync(model.Email, model.Password);
                 if (user != null)
                 {
                     await Authenticate(model.Email);
@@ -56,13 +56,12 @@ namespace Phytime.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
+                User user = await _repository.GetUserByEmailAsync(model.Email);
                 if (user == null)
                 {
                     var newUser = new User() { Email = model.Email };
                     newUser.SetPassword(model.Password);
-                    _context.Users.Add(newUser);
-                    await _context.SaveChangesAsync();
+                    _repository.Add(newUser);
 
                     await Authenticate(model.Email);
 
@@ -88,6 +87,12 @@ namespace Phytime.Controllers
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "Account");
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            (_repository as PhytimeRepository).Dispose();
+            base.Dispose(disposing);
         }
     }
 }

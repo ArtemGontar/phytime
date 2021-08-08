@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Phytime.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +12,11 @@ namespace Phytime.Controllers
     [Route("api/[controller]")]
     public class ItemsController : Controller
     {
-        private readonly PhytimeContext _context;
-        private const string SessionListItemsKey = "items";
-        public ItemsController(PhytimeContext context)
+        private readonly IRepository _repository;
+
+        public ItemsController(IConfiguration config, IRepository repository = null)
         {
-            _context = context;
+            _repository = repository ?? new PhytimeRepository(config);
         }
 
         [HttpGet("{id:int}")]
@@ -26,12 +27,12 @@ namespace Phytime.Controllers
 
         private List<Item> GetItems(int id)
         {
-            var feed = _context.Feeds.Find(id);
+            var feed = _repository.GetFeed(id);
             var list = GetSyndicationItems(feed.Url);
             return CreateItemsList(list);
         }
 
-        private List<SyndicationItem> GetSyndicationItems(string url)
+        public List<SyndicationItem> GetSyndicationItems(string url)
         {
             XmlReader reader = XmlReader.Create(url);
             SyndicationFeed feed = SyndicationFeed.Load(reader);
@@ -39,7 +40,7 @@ namespace Phytime.Controllers
             return feed.Items.ToList();
         }
 
-        private List<Item> CreateItemsList(List<SyndicationItem> list)
+        public List<Item> CreateItemsList(List<SyndicationItem> list)
         {
             var itemsList = new List<Item>();
             foreach(var item in list)
@@ -48,6 +49,12 @@ namespace Phytime.Controllers
                     Summary = item.Summary.Text, Publishdate = item.PublishDate.ToString("D") });
             }
             return itemsList;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            (_repository as PhytimeRepository).Dispose();
+            base.Dispose(disposing);
         }
     }
 }
