@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Phytime.Controllers;
-using Phytime.Models;
+using Phytime.Services;
 using Xunit;
 
 namespace UnitTestApp.Tests.Controllers

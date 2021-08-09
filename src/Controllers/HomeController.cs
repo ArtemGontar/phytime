@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Phytime.Models;
+using Phytime.Services;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Phytime.Controllers

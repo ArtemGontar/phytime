@@ -4,7 +4,7 @@ using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
 
-namespace Phytime.Models
+namespace Phytime.Services
 {
     public class RssSource
     {
