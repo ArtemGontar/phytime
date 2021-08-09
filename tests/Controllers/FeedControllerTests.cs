@@ -10,14 +10,17 @@ namespace UnitTestApp.Tests.Controllers
 {
     public class FeedControllerTests
     {
+        private const string SourceUrl = "https://psyjournals.ru/rss/psyedu.rss";
+        private const int SourceUrlItemsCount = 7;
+
         [Fact]
         public void GetSyndicationItemsTest()
         {
             var mock = new Mock<IConfiguration>();
             var mockRep = new Mock<IRepository>();
             FeedController controller = new FeedController(mock.Object, mockRep.Object);
-            int result = controller.GetSyndicationItems("https://psyjournals.ru/rss/psyedu.rss").Count;
-            Assert.Equal(7, result);
+            int result = controller.GetSyndicationItems(SourceUrl).Count;
+            Assert.Equal(SourceUrlItemsCount, result);
         }
 
         [Fact]
@@ -25,7 +28,7 @@ namespace UnitTestApp.Tests.Controllers
         {
             var mockConf = new Mock<IConfiguration>();
             var mockRep = new Mock<IRepository>();
-            var url = "https://psyjournals.ru/rss/psyedu.rss";
+            var url = SourceUrl;
             var page = 1;
             var syndicationItems = new List<SyndicationItem>()
             {
@@ -45,7 +48,7 @@ namespace UnitTestApp.Tests.Controllers
 
         private Feed GetTestFeed(string s)
         {
-            return new Feed() { ItemsCount = 7, Url = "https://psyjournals.ru/rss/psyedu.rss" };
+            return new Feed() { ItemsCount = SourceUrlItemsCount, Url = SourceUrl };
         }
     }
 }
