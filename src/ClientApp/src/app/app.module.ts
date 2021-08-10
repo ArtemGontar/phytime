@@ -12,7 +12,7 @@ import { DataService } from './data.service';
 
 const appRoutes: Routes = [
     { path: 'angular/:id', component: ItemListComponent },
-    { path: '**', component: NotFoundComponent }
+    { path: 'angular', component: NotFoundComponent }
 ];
 
 @NgModule({
