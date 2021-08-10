@@ -29,6 +29,18 @@ namespace Phytime.Controllers
 
         public IActionResult StartTest(int count, string difficulty, string type)
         {
+            if (count < 1)
+            {
+                throw new ArgumentException(nameof(count));
+            }
+            if(!difficulty.Equals("easy") || !difficulty.Equals("medium") || !difficulty.Equals("Hard"))
+            {
+                throw new ArgumentException(nameof(difficulty));
+            }
+            if (!type.Equals("multiple") || !type.Equals("boolean"))
+            {
+                throw new ArgumentException(nameof(difficulty));
+            }
             Questions questions = null;
             string url = _config.GetSection("Links:test").Value +
                 $"amount={count}&category={QuestionsCategory}&difficulty={difficulty}&type={type}";
@@ -47,6 +59,10 @@ namespace Phytime.Controllers
 
         public IActionResult CheckTest(TestModel model)
         {
+            if(model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
             var resultModelList = new TestResultModelList();
             for (int i = 0; i < model.Answers.Count; i++)
             {

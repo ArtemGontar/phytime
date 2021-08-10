@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Phytime.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel.Syndication;
@@ -22,11 +23,19 @@ namespace Phytime.Controllers
         [HttpGet("{id:int}")]
         public IEnumerable<Item> Get(int id)
         {
+            if (id < 1)
+            {
+                throw new ArgumentException(nameof(id));
+            }
             return GetItems(id);
         }
 
         private List<Item> GetItems(int id)
         {
+            if (id < 1)
+            {
+                throw new ArgumentException(nameof(id));
+            }
             var feed = _repository.GetFeed(id);
             var list = GetSyndicationItems(feed.Url);
             return CreateItemsList(list);
@@ -34,6 +43,10 @@ namespace Phytime.Controllers
 
         public List<SyndicationItem> GetSyndicationItems(string url)
         {
+            if (string.IsNullOrEmpty(url))
+            {
+                throw new ArgumentNullException(nameof(url));
+            }
             XmlReader reader = XmlReader.Create(url);
             SyndicationFeed feed = SyndicationFeed.Load(reader);
             reader.Close();
@@ -42,6 +55,10 @@ namespace Phytime.Controllers
 
         public List<Item> CreateItemsList(List<SyndicationItem> list)
         {
+            if (list == null)
+            {
+                throw new ArgumentNullException(nameof(list));
+            }
             var itemsList = new List<Item>();
             foreach(var item in list)
             {

@@ -73,10 +73,14 @@ namespace Phytime.Services
 
         public List<User> FindUsersToSend(Feed feed)
         {
+            if(feed == null)
+            {
+                throw new ArgumentNullException(nameof(feed));
+            }
             return _repository.GetFeedIncudeUsers(feed).Users;
         }
 
-        public void SendNotifications(List<User> users, Feed feed)
+        private void SendNotifications(List<User> users, Feed feed)
         { 
             foreach (var user in users)
             {
@@ -87,6 +91,18 @@ namespace Phytime.Services
 
         public MimeMessage FormMessage(string email, string subject, string message)
         {
+            if (string.IsNullOrEmpty(email))
+            {
+                throw new ArgumentNullException(nameof(email));
+            }
+            if (string.IsNullOrEmpty(subject))
+            {
+                throw new ArgumentNullException(nameof(subject));
+            }
+            if (string.IsNullOrEmpty(message))
+            {
+                throw new ArgumentNullException(nameof(message));
+            }
             var emailMessage = new MimeMessage();
             emailMessage.From.Add(new MailboxAddress("Site administration", 
                 _config.GetSection("AdminEmailParametrs:email").Value));
@@ -99,7 +115,7 @@ namespace Phytime.Services
             return emailMessage;
         }
 
-        public void SendEmail(MimeMessage emailMessage)
+        private void SendEmail(MimeMessage emailMessage)
         {
             using (var client = new SmtpClient())
             {

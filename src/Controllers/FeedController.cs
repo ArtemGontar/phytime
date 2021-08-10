@@ -9,22 +9,31 @@ using System.Xml;
 using Phytime.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
+using System;
 
 namespace Phytime.Controllers
 {
     public class FeedController : Controller
     {
         private readonly IConfiguration _config;
-        private readonly IRepository _repository;
+        private readonly IRepository<Feed> _repository;
 
-        public FeedController(IConfiguration config, IRepository repository = null)
+        public FeedController(IConfiguration config, IRepository<Feed> repository = null)
         {
             _config = config;
-            _repository = repository ?? new PhytimeRepository(config);
+            _repository = repository ?? new FeedRepository(config);
         }
 
         public ActionResult RssFeed(string url, int page)
         {
+            if (string.IsNullOrEmpty(url))
+            {
+                throw new ArgumentNullException(nameof(url));
+            }
+            if (page < 1)
+            {
+                throw new ArgumentException(nameof(page));
+            }
             ViewBag.Subscribed = IsSubscribed(url);
             var feedItems = GetSyndicationItems(url);
             if(Request.HasFormContentType)
@@ -39,6 +48,18 @@ namespace Phytime.Controllers
 
         public Feed FormFeed(string url, int page, List<SyndicationItem> items)
         {
+            if (string.IsNullOrEmpty(url))
+            {
+                throw new ArgumentNullException(nameof(url));
+            }
+            if (page < 1)
+            {
+                throw new ArgumentException(nameof(page));
+            }
+            if (items == null)
+            {
+                throw new ArgumentNullException(nameof(items));
+            }
             int pageSize = int.Parse(_config.GetSection("FeedPageInfo:pageSize").Value);
             IEnumerable<SyndicationItem> itemsPerPages = items.Skip((page - 1) * pageSize).Take(pageSize);
             PageInfo pageInfo = new PageInfo { PageNumber = page, PageSize = pageSize, TotalItems = items.Count };
@@ -50,6 +71,10 @@ namespace Phytime.Controllers
 
         public List<SyndicationItem> GetSyndicationItems(string url)
         {
+            if (string.IsNullOrEmpty(url))
+            {
+                throw new ArgumentNullException(nameof(url));
+            }
             XmlReader reader = XmlReader.Create(url);
             SyndicationFeed feed = SyndicationFeed.Load(reader);
             reader.Close();
@@ -58,14 +83,22 @@ namespace Phytime.Controllers
 
         public bool IsSubscribed(string url)
         {
-            var feed = _repository.GetFeedByUrl(url);
+            if (string.IsNullOrEmpty(url))
+            {
+                throw new ArgumentNullException(nameof(url));
+            }
+            var feed = _repository.GetBy(url);
             var user = _repository.GetUserByEmail(HttpContext.User.Identity.Name);
             return _repository.FeedContainsUser(feed, user);
         }
 
         public IActionResult Subscribe(string url)
         {
-            var feed = _repository.GetFeedByUrl(url);
+            if (string.IsNullOrEmpty(url))
+            {
+                throw new ArgumentNullException(nameof(url));
+            }
+            var feed = _repository.GetBy(url);
             var user = _repository.GetUserByEmail(HttpContext.User.Identity.Name);
             _repository.AddUserToFeed(feed, user);
             return RedirectToAction("RssFeed", new { url = url, page = 1});
@@ -73,7 +106,11 @@ namespace Phytime.Controllers
 
         public IActionResult UnSubscribe(string url)
         {
-            var feed = _repository.GetFeedByUrl(url);
+            if (string.IsNullOrEmpty(url))
+            {
+                throw new ArgumentNullException(nameof(url));
+            }
+            var feed = _repository.GetBy(url);
             var user = _repository.GetUserByEmail(HttpContext.User.Identity.Name);
             _repository.RemoveUserFromFeed(feed, user);
             return RedirectToAction("RssFeed", new { url = url, page = 1 });
@@ -91,7 +128,7 @@ namespace Phytime.Controllers
 
         protected override void Dispose(bool disposing)
         {
-            (_repository as PhytimeRepository).Dispose();
+            _repository.Dispose();
             base.Dispose(disposing);
         }
     }

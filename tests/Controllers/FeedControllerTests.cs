@@ -17,7 +17,7 @@ namespace UnitTestApp.Tests.Controllers
         public void GetSyndicationItemsTest()
         {
             var mock = new Mock<IConfiguration>();
-            var mockRep = new Mock<IRepository>();
+            var mockRep = new Mock<PhytimeRepository>();
             FeedController controller = new FeedController(mock.Object, mockRep.Object);
             int result = controller.GetSyndicationItems(SourceUrl).Count;
             Assert.Equal(SourceUrlItemsCount, result);
@@ -27,7 +27,7 @@ namespace UnitTestApp.Tests.Controllers
         public void FormFeedTest()
         {
             var mockConf = new Mock<IConfiguration>();
-            var mockRep = new Mock<IRepository>();
+            var mockRep = new Mock<PhytimeRepository>();
             var url = SourceUrl;
             var page = 1;
             var syndicationItems = new List<SyndicationItem>()
