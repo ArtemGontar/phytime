@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Phytime.ViewModels;
@@ -13,11 +12,11 @@ namespace Phytime.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IRepository _repository;
+        private readonly UserRepository _userRepository;
 
-        public AccountController(IConfiguration config, IRepository repository = null)
+        public AccountController(IConfiguration config)
         {
-            _repository = repository ?? new PhytimeRepository(config);
+            _userRepository = new UserRepository(config);
         }
 
         [HttpGet]
@@ -32,7 +31,7 @@ namespace Phytime.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await _repository.GetUserAsync(model.Email, model.Password);
+                User user = await _userRepository.GetUserAsync(model.Email, model.Password);
                 if (user != null)
                 {
                     await Authenticate(model.Email);
@@ -56,12 +55,12 @@ namespace Phytime.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await _repository.GetUserByEmailAsync(model.Email);
+                User user = await _userRepository.GetUserByEmailAsync(model.Email);
                 if (user == null)
                 {
                     var newUser = new User() { Email = model.Email };
                     newUser.SetPassword(model.Password);
-                    _repository.Add(newUser);
+                    _userRepository.Add(newUser);
 
                     await Authenticate(model.Email);
 
@@ -91,7 +90,7 @@ namespace Phytime.Controllers
 
         protected override void Dispose(bool disposing)
         {
-            (_repository as PhytimeRepository).Dispose();
+            _userRepository.Dispose();
             base.Dispose(disposing);
         }
     }

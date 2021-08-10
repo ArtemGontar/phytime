@@ -17,14 +17,14 @@ namespace Phytime.Services
     {
         private readonly RssSource _rssSource;
         private readonly IConfiguration _config;
-        private readonly IRepository _repository;
+        private readonly IRepository<Feed, User> _feedRepository;
         private Timer _timer;    
 
-        public EmailService(IConfiguration config, IRepository repository = null)
+        public EmailService(IConfiguration config, IRepository<Feed, User> repository = null)
         {
             _rssSource = RssSource.getInstance();
             _config = config;
-            _repository = repository ?? new PhytimeRepository(config);
+            _feedRepository = repository ?? new FeedRepository(config);
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -53,7 +53,7 @@ namespace Phytime.Services
                 XmlReader reader = XmlReader.Create(url);
                 SyndicationFeed feed = SyndicationFeed.Load(reader);
                 reader.Close();
-                var rssFeed = _repository.GetFeedByUrl(url);
+                var rssFeed = _feedRepository.GetBy(url);
                 if (rssFeed != null)
                 {
                     if (rssFeed.ItemsCount != feed.Items.ToList().Count)
@@ -65,7 +65,7 @@ namespace Phytime.Services
                 //needs to be moved to new class
                 else
                 {
-                    _repository.Add(new Feed { Title = _rssSource.Titles[_rssSource.Urls.IndexOf(url)],
+                    _feedRepository.Add(new Feed { Title = _rssSource.Titles[_rssSource.Urls.IndexOf(url)],
                         Url = url, ItemsCount = feed.Items.ToList().Count });
                 }
             }
@@ -77,7 +77,7 @@ namespace Phytime.Services
             {
                 throw new ArgumentNullException(nameof(feed));
             }
-            return _repository.GetFeedIncudeUsers(feed).Users;
+            return _feedRepository.GetInclude(feed).Users;
         }
 
         private void SendNotifications(List<User> users, Feed feed)

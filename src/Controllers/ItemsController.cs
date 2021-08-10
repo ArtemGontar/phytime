@@ -13,11 +13,11 @@ namespace Phytime.Controllers
     [Route("api/[controller]")]
     public class ItemsController : Controller
     {
-        private readonly IRepository _repository;
+        private readonly IRepository<Feed, User> _feedRepository;
 
-        public ItemsController(IConfiguration config, IRepository repository = null)
+        public ItemsController(IConfiguration config)
         {
-            _repository = repository ?? new PhytimeRepository(config);
+            _feedRepository = new FeedRepository(config);
         }
 
         [HttpGet("{id:int}")]
@@ -36,7 +36,7 @@ namespace Phytime.Controllers
             {
                 throw new ArgumentException(nameof(id));
             }
-            var feed = _repository.GetFeed(id);
+            var feed = _feedRepository.Get(id);
             var list = GetSyndicationItems(feed.Url);
             return CreateItemsList(list);
         }
@@ -70,7 +70,7 @@ namespace Phytime.Controllers
 
         protected override void Dispose(bool disposing)
         {
-            (_repository as PhytimeRepository).Dispose();
+            _feedRepository.Dispose();
             base.Dispose(disposing);
         }
     }

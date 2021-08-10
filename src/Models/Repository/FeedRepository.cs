@@ -22,7 +22,7 @@ namespace Phytime.Models
 
         public void Add(Feed item)
         {
-            _db.Add(item);
+            _db.Feeds.Add(item);
             Save();
         }
 
@@ -70,6 +70,33 @@ namespace Phytime.Models
         public Feed GetBy(string url)
         {
             return _db.Feeds.FirstOrDefault(feed => feed.Url == url);
+        }
+
+        public bool ContainsItem(Feed contains, User item)
+        {
+            return _db.Feeds.Include(c => c.Users).ToList().
+                FirstOrDefault(feed => feed.Id == contains.Id)
+                .Users.Select(u => u.Id).Contains(item.Id);
+        }
+
+        public void AddItemToContains(Feed contains, User item)
+        {
+            contains.Users.Add(item);
+            Save();
+        }
+
+        public void RemoveItemFromContains(Feed contains, User item)
+        {
+            var dbuser = _db.Users.Include(c => c.Feeds).ToList()
+                .FirstOrDefault(user => user.Id == item.Id);
+            Feed dbFeed = _db.Feeds.FirstOrDefault(feed => feed.Id == contains.Id);
+            dbuser.Feeds.Remove(dbFeed);
+            Save();
+        }
+
+        public User GetContainedItemBy(string email)
+        {
+            return _db.Users.FirstOrDefault(user => user.Email == email);
         }
     }
 }
