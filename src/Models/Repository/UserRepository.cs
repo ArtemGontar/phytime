@@ -9,12 +9,12 @@ namespace Phytime.Models
     public class UserRepository : IRepository<User, Feed>
     {
         private PhytimeContext _db;
-        public UserRepository() { }
+        private const string ConnectionString = "Server=(localdb)\\mssqllocaldb;Database=phytime2021db;Trusted_Connection=True;";
 
-        public UserRepository(string connectionString)
+        public UserRepository()
         {
             var options = new DbContextOptionsBuilder<PhytimeContext>();
-            options.UseSqlServer(connectionString);
+            options.UseSqlServer(ConnectionString);
             _db = new PhytimeContext(options.Options);
         }
 

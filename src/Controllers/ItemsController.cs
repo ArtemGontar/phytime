@@ -14,17 +14,18 @@ namespace Phytime.Controllers
     [Route("api/[controller]")]
     public class ItemsController : Controller
     {
+        private const int FirstValidId = 1;
         private readonly IRepository<Feed, User> _feedRepository;
 
-        public ItemsController(IOptions<ConnectionStringsOptions> options, IRepository<Feed, User> repository = null)
+        public ItemsController(IRepository<Feed, User> repository = null)
         {
-            _feedRepository = repository ?? new FeedRepository(options.Value.DefaultConnection);
+            _feedRepository = repository ?? new FeedRepository();
         }
 
         [HttpGet("{id:int}")]
         public IEnumerable<Item> Get(int id)
         {
-            if (id < 1)
+            if (id < FirstValidId)
             {
                 throw new ArgumentException(nameof(id));
             }
@@ -33,7 +34,7 @@ namespace Phytime.Controllers
 
         private List<Item> GetItems(int id)
         {
-            if (id < 1)
+            if (id < FirstValidId)
             {
                 throw new ArgumentException(nameof(id));
             }

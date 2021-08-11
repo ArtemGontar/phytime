@@ -25,7 +25,7 @@ namespace Phytime.Services
         {
             _rssSource = RssSource.getInstance();
             _options = options.Value;
-            _feedRepository = repository ?? new FeedRepository(_options.DefaultConnection);
+            _feedRepository = repository ?? new FeedRepository();
         }
 
         public Task StartAsync(CancellationToken cancellationToken)

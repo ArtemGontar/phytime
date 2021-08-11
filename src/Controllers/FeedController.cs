@@ -5,21 +5,17 @@ using System.Linq;
 using System.ServiceModel.Syndication;
 using System.Xml;
 using Phytime.Services;
-using Microsoft.Extensions.Configuration;
 using System;
-using Microsoft.Extensions.Options;
 
 namespace Phytime.Controllers
 {
     public class FeedController : Controller
     {
-        private readonly ConnectionStringsOptions _options;
         private readonly IRepository<Feed, User> _feedRepository;
 
-        public FeedController(IOptions<ConnectionStringsOptions> options, IRepository<Feed, User> repository = null)
+        public FeedController(IRepository<Feed, User> repository = null)
         {
-            _options = options.Value;
-            _feedRepository = repository ?? new FeedRepository(_options.DefaultConnection);
+            _feedRepository = repository ?? new FeedRepository();
         }
 
         public ActionResult RssFeed(string url, int page)

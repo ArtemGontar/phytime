@@ -14,9 +14,9 @@ namespace Phytime.Controllers
     {
         private readonly UserRepository _userRepository;
 
-        public AccountController(IOptions<ConnectionStringsOptions> options)
+        public AccountController()
         {
-            _userRepository = new UserRepository(options.Value.DefaultConnection);
+            _userRepository = new UserRepository();
         }
 
         [HttpGet]

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.ServiceModel.Syndication;
 
 namespace Phytime.Services
@@ -49,7 +48,9 @@ namespace Phytime.Services
             DateTime currentDate = DateTime.Now;
             foreach (var item in list)
             {
-                if (item.PublishDate >= currentDate.AddDays(-_WeekDaysCount) )
+                int result = DateTime.Compare(currentDate.AddDays(-_WeekDaysCount),
+                    item.PublishDate.DateTime);
+                if (result < 0)
                 {
                     newList.Add(item);
                 }
@@ -63,7 +64,9 @@ namespace Phytime.Services
             DateTime currentDate = DateTime.Now;
             foreach (var item in list)
             {
-                if (item.PublishDate >= currentDate.AddDays(-_MonthDaysCount))
+                int result = DateTime.Compare(currentDate.AddDays(-_MonthDaysCount),
+                    item.PublishDate.DateTime);
+                if (result < 0)
                 {
                     newList.Add(item);
                 }
