@@ -7,7 +7,7 @@ namespace UnitTestApp.Tests.Services
     public class RssSourceTests
     {
         [Fact]
-        public void GetUrlListsTest()
+        public void GetUrlLists_ReturnsUrlList_True()
         {
             var source = RssSource.getInstance();
 
@@ -15,7 +15,7 @@ namespace UnitTestApp.Tests.Services
         }
 
         [Fact]
-        public void GetTitleListsTest()
+        public void GetTitleLists_ReturnsTitleList_True()
         {
             var source = RssSource.getInstance();
 
@@ -23,7 +23,7 @@ namespace UnitTestApp.Tests.Services
         }
 
         [Fact]
-        public void TitlesAndUrlsCountEqualTest()
+        public void GetTitlesAndUrls_ListsCountEqual_True()
         {
             var source = RssSource.getInstance();
 

@@ -8,7 +8,7 @@ namespace UnitTestApp.Tests.Controllers
     public class HomeControllerTests
     {
         [Fact]
-        public void IndexReturnsViewWithUrls()
+        public void Index_ModelItemsNotEmpty_True()
         {
             var controller = new HomeController();
 

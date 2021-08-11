@@ -6,7 +6,7 @@ using Phytime.ViewModels;
 using Phytime.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace Phytime.Controllers
 {
@@ -14,9 +14,9 @@ namespace Phytime.Controllers
     {
         private readonly UserRepository _userRepository;
 
-        public AccountController(IConfiguration config)
+        public AccountController(IOptions<ConnectionStringsOptions> options)
         {
-            _userRepository = new UserRepository(config);
+            _userRepository = new UserRepository(options.Value.DefaultConnection);
         }
 
         [HttpGet]

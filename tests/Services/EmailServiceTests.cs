@@ -2,21 +2,19 @@
 using Xunit;
 using Phytime.Services;
 using Phytime.Models;
-using Microsoft.Extensions.Configuration;
-using System.Linq;
 using MimeKit;
+using Microsoft.Extensions.Options;
 
 namespace UnitTestApp.Tests.Services
 {
     public class EmailServiceTests
     {
         [Fact]
-        public void FormEmailMessageTest()
+        public void FormEmailMessage_MessageFieldsEqualsToInputData_True()
         {
-            var mockConf = new Mock<IConfiguration>();
-            var mockRep = new Mock<IRepository>();
-            mockConf.Setup(conf => conf.GetSection("AdminEmailParametrs:email").Value).Returns("adminEmail");
-            var service = new EmailService(mockConf.Object, mockRep.Object);
+            var option = Options.Create(new EmailServiceOptions() { Email = "adminEmail" });
+            var repositoryMock = new Mock<IRepository<Feed, User>>();
+            var service = new EmailService(option, repositoryMock.Object);
             string email = "testMail";
             string sub = "testSubject";
             string mess = "testMessage";

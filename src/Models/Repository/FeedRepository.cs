@@ -3,6 +3,8 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Phytime.Models
 {
@@ -12,11 +14,10 @@ namespace Phytime.Models
 
         public FeedRepository() { }
 
-        public FeedRepository(IConfiguration config)
+        public FeedRepository(string connectionString)
         {
-            string connection = config.GetConnectionString("DefaultConnection");
             var options = new DbContextOptionsBuilder<PhytimeContext>();
-            options.UseSqlServer(connection);
+            options.UseSqlServer(connectionString);
             _db = new PhytimeContext(options.Options);
         }
 

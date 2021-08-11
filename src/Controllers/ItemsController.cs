@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Phytime.Models;
 using System;
 using System.Collections.Generic;
@@ -15,9 +16,9 @@ namespace Phytime.Controllers
     {
         private readonly IRepository<Feed, User> _feedRepository;
 
-        public ItemsController(IConfiguration config)
+        public ItemsController(IOptions<ConnectionStringsOptions> options, IRepository<Feed, User> repository = null)
         {
-            _feedRepository = new FeedRepository(config);
+            _feedRepository = repository ?? new FeedRepository(options.Value.DefaultConnection);
         }
 
         [HttpGet("{id:int}")]

@@ -7,18 +7,19 @@ using System.Xml;
 using Phytime.Services;
 using Microsoft.Extensions.Configuration;
 using System;
+using Microsoft.Extensions.Options;
 
 namespace Phytime.Controllers
 {
     public class FeedController : Controller
     {
-        private readonly IConfiguration _config;
+        private readonly ConnectionStringsOptions _options;
         private readonly IRepository<Feed, User> _feedRepository;
 
-        public FeedController(IConfiguration config, IRepository<Feed, User> repository = null)
+        public FeedController(IOptions<ConnectionStringsOptions> options, IRepository<Feed, User> repository = null)
         {
-            _config = config;
-            _feedRepository = repository ?? new FeedRepository(config);
+            _options = options.Value;
+            _feedRepository = repository ?? new FeedRepository(_options.DefaultConnection);
         }
 
         public ActionResult RssFeed(string url, int page)
@@ -57,9 +58,8 @@ namespace Phytime.Controllers
             {
                 throw new ArgumentNullException(nameof(items));
             }
-            int pageSize = int.Parse(_config.GetSection("FeedPageInfo:pageSize").Value);
-            IEnumerable<SyndicationItem> itemsPerPages = items.Skip((page - 1) * pageSize).Take(pageSize);
-            PageInfo pageInfo = new PageInfo { PageNumber = page, PageSize = pageSize, TotalItems = items.Count };
+            PageInfo pageInfo = new PageInfo { PageNumber = page, TotalItems = items.Count };
+            IEnumerable<SyndicationItem> itemsPerPages = items.Skip((page - 1) * pageInfo.PageSize).Take(pageInfo.PageSize);
             Feed rssFeed = _feedRepository.GetBy(url);
             rssFeed.PageInfo = pageInfo;
             rssFeed.SyndicationItems = itemsPerPages;

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Phytime.Models;
 using Phytime.ViewModels;
 using System;
@@ -14,11 +15,11 @@ namespace Phytime.Controllers
     public class TestController : Controller
     {
         private const int QuestionsCategory = 9;
-        private readonly IConfiguration _config;
+        private readonly ConnectionStringsOptions _options;
 
-        public TestController(IConfiguration config)
+        public TestController(IOptions<ConnectionStringsOptions> options)
         {
-            _config = config;
+            _options = options.Value;
         }
 
         [HttpGet]
@@ -33,16 +34,16 @@ namespace Phytime.Controllers
             {
                 throw new ArgumentException(nameof(count));
             }
-            if(!difficulty.Equals("easy") || !difficulty.Equals("medium") || !difficulty.Equals("Hard"))
+            if(!difficulty.Equals("easy") && !difficulty.Equals("medium") && !difficulty.Equals("hard"))
             {
                 throw new ArgumentException(nameof(difficulty));
             }
-            if (!type.Equals("multiple") || !type.Equals("boolean"))
+            if (!type.Equals("multiple") && !type.Equals("boolean"))
             {
-                throw new ArgumentException(nameof(difficulty));
+                throw new ArgumentException(nameof(type));
             }
             Questions questions = null;
-            string url = _config.GetSection("Links:test").Value +
+            string url = _options.TestsConnection +
                 $"amount={count}&category={QuestionsCategory}&difficulty={difficulty}&type={type}";
             using (WebClient wc = new WebClient())
             {

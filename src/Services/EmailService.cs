@@ -10,21 +10,22 @@ using System.ServiceModel.Syndication;
 using System.Linq;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
+using Microsoft.Extensions.Options;
 
 namespace Phytime.Services
 {
     public class EmailService : IHostedService, IDisposable
     {
         private readonly RssSource _rssSource;
-        private readonly IConfiguration _config;
+        private readonly EmailServiceOptions _options;
         private readonly IRepository<Feed, User> _feedRepository;
         private Timer _timer;    
 
-        public EmailService(IConfiguration config, IRepository<Feed, User> repository = null)
+        public EmailService(IOptions<EmailServiceOptions> options, IRepository<Feed, User> repository = null)
         {
             _rssSource = RssSource.getInstance();
-            _config = config;
-            _feedRepository = repository ?? new FeedRepository(config);
+            _options = options.Value;
+            _feedRepository = repository ?? new FeedRepository(_options.DefaultConnection);
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -104,8 +105,7 @@ namespace Phytime.Services
                 throw new ArgumentNullException(nameof(message));
             }
             var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress("Site administration", 
-                _config.GetSection("AdminEmailParametrs:email").Value));
+            emailMessage.From.Add(new MailboxAddress("Site administration", _options.Email));
             emailMessage.To.Add(new MailboxAddress("", email));
             emailMessage.Subject = subject;
             emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
@@ -119,12 +119,9 @@ namespace Phytime.Services
         {
             using (var client = new SmtpClient())
             {
-                client.Connect(_config["AdminEmailParametrs:smtp"], 
-                    int.Parse(_config["AdminEmailParametrs:port"]), false);
-                client.Authenticate(_config["AdminEmailParametrs:email"], 
-                    _config["AdminEmailParametrs:password"]);
+                client.Connect(_options.SMTP, _options.Port, false);
+                client.Authenticate(_options.Email, _options.Password);
                 client.Send(emailMessage);
-
                 client.Disconnect(true);
             }
         }

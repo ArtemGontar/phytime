@@ -6,17 +6,18 @@ using System.Collections.Generic;
 using System;
 using System.ServiceModel.Syndication;
 using Xunit;
+using Microsoft.Extensions.Options;
 
 namespace UnitTestApp.Tests.Controllers
 {
     public class ItemsControllerTests
     {
         [Fact]
-        public void GetSyndicationItemsTest()
+        public void GetSyndicationItems_ItemsListNotEmpty_True()
         {
-            var mock = new Mock<IConfiguration>();
-            var mockRep = new Mock<IRepository>();
-            var controller = new ItemsController(mock.Object, mockRep.Object);
+            var configurationMock = new Mock<IOptions<ConnectionStringsOptions>>();
+            var repositoryMock = new Mock<IRepository<Feed, User>>();
+            var controller = new ItemsController(configurationMock.Object, repositoryMock.Object);
 
             var result = controller.GetSyndicationItems("https://psyjournals.ru/rss/psyedu.rss");
 
@@ -24,11 +25,11 @@ namespace UnitTestApp.Tests.Controllers
         }
 
         [Fact]
-        public void CreateItemsListTest()
+        public void CreateItemsList_ListNotEmpty_True()
         {
-            var mock = new Mock<IConfiguration>();
-            var mockRep = new Mock<IRepository>();
-            var controller = new ItemsController(mock.Object, mockRep.Object);
+            var configurationMock = new Mock<IOptions<ConnectionStringsOptions>>();
+            var repositoryMock = new Mock<IRepository<Feed, User>>();
+            var controller = new ItemsController(configurationMock.Object, repositoryMock.Object);
 
             var result = controller.CreateItemsList(GetTestSyndicationItems());
 

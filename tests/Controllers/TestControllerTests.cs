@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Moq;
 using Phytime.Controllers;
+using Phytime.Models;
 using Phytime.ViewModels;
 using Xunit;
 
@@ -10,13 +12,12 @@ namespace UnitTestApp.Tests.Controllers
     public class TestControllerTests
     {
         [Fact]
-        public void StartTestReturnsViewWithQuestions()
+        public void StartTest_Returns5Questions_Returned5()
         {
-            var mock = new Mock<IConfiguration>();
-            mock.Setup(conf => conf.GetSection("Links:test").Value).Returns("https://opentdb.com/api.php?");
-            var controller = new TestController(mock.Object);
+            var option = Options.Create(new ConnectionStringsOptions() { TestsConnection = "https://opentdb.com/api.php?" });
+            var controller = new TestController(option);
             int count = 5;
-            string difficulty = "easy";
+            string difficulty = "hard";
             string type = "boolean";
 
             var view = controller.StartTest(count, difficulty, type);
@@ -28,10 +29,10 @@ namespace UnitTestApp.Tests.Controllers
         }
 
         [Fact]
-        public void CheckTestReturnsViewWithResultModelList()
+        public void CheckTest_Returns1Point_1Point()
         {
-            var mock = new Mock<IConfiguration>();
-            var controller = new TestController(mock.Object);
+            var configurationMock = new Mock<IOptions<ConnectionStringsOptions>> ();
+            var controller = new TestController(configurationMock.Object);
             var testModel = new TestModel();
             testModel.Answers.Add("key1", "rightAnswer");
             testModel.Answers.Add("key2", "wrongAnswer");

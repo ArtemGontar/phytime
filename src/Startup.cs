@@ -42,6 +42,12 @@ namespace Phytime
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.Configure<EmailServiceOptions>(Configuration.GetSection(
+                                        EmailServiceOptions.EmailService));
+
+            services.Configure<ConnectionStringsOptions>(Configuration.GetSection(
+                                        ConnectionStringsOptions.ConnectionStrings));
+
             services.AddDistributedMemoryCache();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);

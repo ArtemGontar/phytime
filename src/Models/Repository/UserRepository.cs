@@ -11,11 +11,10 @@ namespace Phytime.Models
         private PhytimeContext _db;
         public UserRepository() { }
 
-        public UserRepository(IConfiguration config)
+        public UserRepository(string connectionString)
         {
-            string connection = config.GetConnectionString("DefaultConnection");
             var options = new DbContextOptionsBuilder<PhytimeContext>();
-            options.UseSqlServer(connection);
+            options.UseSqlServer(connectionString);
             _db = new PhytimeContext(options.Options);
         }
 
