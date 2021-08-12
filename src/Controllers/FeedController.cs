@@ -11,11 +11,13 @@ namespace Phytime.Controllers
 {
     public class FeedController : Controller
     {
-        private readonly IRepository<Feed, User> _feedRepository;
+        private readonly IRepository<Feed> _feedRepository;
+        private readonly IRepository<User> _userRepository;
 
-        public FeedController(IRepository<Feed, User> repository = null)
+        public FeedController(PhytimeContext context, IRepository<Feed> feedRepository = null, IRepository<User> userRepository = null)
         {
-            _feedRepository = repository ?? new FeedRepository();
+            _feedRepository = feedRepository ?? new FeedRepository(context);
+            _userRepository = userRepository ?? new UserRepository(context);
         }
 
         public ActionResult RssFeed(string url, int page)
@@ -81,8 +83,15 @@ namespace Phytime.Controllers
                 throw new ArgumentNullException(nameof(url));
             }
             var feed = _feedRepository.GetBy(url);
-            var user = _feedRepository.GetContainedItemBy(HttpContext.User.Identity.Name);
-            return _feedRepository.ContainsItem(feed, user);
+            feed = _feedRepository.GetInclude(feed);
+            foreach(var user in feed.Users)
+            {
+                if(user.Email.Equals(HttpContext.User.Identity.Name))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public IActionResult Subscribe(string url)
@@ -91,9 +100,9 @@ namespace Phytime.Controllers
             {
                 throw new ArgumentNullException(nameof(url));
             }
-            var feed = _feedRepository.GetBy(url);
-            var user = _feedRepository.GetContainedItemBy(HttpContext.User.Identity.Name);
-            _feedRepository.AddItemToContains(feed, user);
+            var user = _userRepository.GetBy(HttpContext.User.Identity.Name);
+            _feedRepository.GetBy(url).Users.Add(user);
+            _feedRepository.Save();
             return RedirectToAction("RssFeed", new { url = url, page = 1});
         }
 
@@ -104,8 +113,10 @@ namespace Phytime.Controllers
                 throw new ArgumentNullException(nameof(url));
             }
             var feed = _feedRepository.GetBy(url);
-            var user = _feedRepository.GetContainedItemBy(HttpContext.User.Identity.Name);
-            _feedRepository.RemoveItemFromContains(feed, user);
+            feed = _feedRepository.GetInclude(feed);
+            var user = _userRepository.GetBy(HttpContext.User.Identity.Name);
+            feed.Users.Remove(user);
+            _feedRepository.Save();
             return RedirectToAction("RssFeed", new { url = url, page = 1 });
         }
 

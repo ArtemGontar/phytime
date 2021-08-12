@@ -15,11 +15,13 @@ namespace UnitTestApp.Tests.Controllers
         private const int SourceUrlItemsCount = 7;
 
         [Fact]
-        public void GetSyndicationItems_ItemsCount7_7Returned()
+        public void GetSyndicationItems_ItemsCountSeven_SevenReturned()
         {
-            var configurationMock = new Mock<IOptions<ConnectionStringsOptions>>();
-            var repositoryMock = new Mock<IRepository<Feed, User>>();
-            FeedController controller = new FeedController(configurationMock.Object, repositoryMock.Object);
+            var configurationMock = new Mock<PhytimeContext>();
+            var feedRepositoryMock = new Mock<IRepository<Feed>>();
+            var userRepositoryMock = new Mock<IRepository<User>>();
+            FeedController controller = new FeedController(configurationMock.Object, 
+                feedRepositoryMock.Object, userRepositoryMock.Object);
             int result = controller.GetSyndicationItems(SourceUrl).Count;
             Assert.Equal(SourceUrlItemsCount, result);
         }
@@ -27,8 +29,9 @@ namespace UnitTestApp.Tests.Controllers
         [Fact]
         public void FormFeed_FeedPropertiesNotEmpty_True()
         {
-            var configurationMock = new Mock<IOptions<ConnectionStringsOptions>>();
-            var repositoryMock = new Mock<IRepository<Feed, User>>();
+            var configurationMock = new Mock<PhytimeContext>();
+            var feedRepositoryMock = new Mock<IRepository<Feed>>();
+            var userRepositoryMock = new Mock<IRepository<User>>();
             var url = SourceUrl;
             var page = 1;
             var syndicationItems = new List<SyndicationItem>()
@@ -37,8 +40,9 @@ namespace UnitTestApp.Tests.Controllers
                 new SyndicationItem(),
                 new SyndicationItem()
             };
-            repositoryMock.Setup(repo => repo.GetBy(url)).Returns(GetTestFeed(""));
-            FeedController controller = new FeedController(configurationMock.Object, repositoryMock.Object);
+            feedRepositoryMock.Setup(repo => repo.GetBy(url)).Returns(GetTestFeed(""));
+            FeedController controller = new FeedController(configurationMock.Object,
+                feedRepositoryMock.Object, userRepositoryMock.Object);
 
             var feed = controller.FormFeed(url, page, syndicationItems);
 

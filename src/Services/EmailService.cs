@@ -18,10 +18,10 @@ namespace Phytime.Services
     {
         private readonly RssSource _rssSource;
         private readonly EmailServiceOptions _options;
-        private readonly IRepository<Feed, User> _feedRepository;
+        private readonly IRepository<Feed> _feedRepository;
         private Timer _timer;    
 
-        public EmailService(IOptions<EmailServiceOptions> options, IRepository<Feed, User> repository = null)
+        public EmailService(IOptions<EmailServiceOptions> options, IRepository<Feed> repository = null)
         {
             _rssSource = RssSource.getInstance();
             _options = options.Value;

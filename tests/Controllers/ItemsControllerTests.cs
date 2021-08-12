@@ -15,9 +15,8 @@ namespace UnitTestApp.Tests.Controllers
         [Fact]
         public void GetSyndicationItems_ItemsListNotEmpty_True()
         {
-            var configurationMock = new Mock<IOptions<ConnectionStringsOptions>>();
-            var repositoryMock = new Mock<IRepository<Feed, User>>();
-            var controller = new ItemsController(configurationMock.Object, repositoryMock.Object);
+            var repositoryMock = new Mock<IRepository<Feed>>();
+            var controller = new ItemsController(repositoryMock.Object);
 
             var result = controller.GetSyndicationItems("https://psyjournals.ru/rss/psyedu.rss");
 
@@ -27,9 +26,8 @@ namespace UnitTestApp.Tests.Controllers
         [Fact]
         public void CreateItemsList_ListNotEmpty_True()
         {
-            var configurationMock = new Mock<IOptions<ConnectionStringsOptions>>();
-            var repositoryMock = new Mock<IRepository<Feed, User>>();
-            var controller = new ItemsController(configurationMock.Object, repositoryMock.Object);
+            var repositoryMock = new Mock<IRepository<Feed>>();
+            var controller = new ItemsController(repositoryMock.Object);
 
             var result = controller.CreateItemsList(GetTestSyndicationItems());
 

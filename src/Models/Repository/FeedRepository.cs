@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Phytime.Models
 {
-    public class FeedRepository : IRepository<Feed, User>
+    public class FeedRepository : IRepository<Feed>
     {
         private PhytimeContext _db;
         private const string ConnectionString = "Server=(localdb)\\mssqllocaldb;Database=phytime2021db;Trusted_Connection=True;";
@@ -18,6 +18,11 @@ namespace Phytime.Models
             var options = new DbContextOptionsBuilder<PhytimeContext>();
             options.UseSqlServer(ConnectionString);
             _db = new PhytimeContext(options.Options);
+        }
+
+        public FeedRepository(PhytimeContext context)
+        {
+            _db = context;
         }
 
         public void Add(Feed item)
@@ -63,40 +68,13 @@ namespace Phytime.Models
 
         public void Update(Feed item)
         {
-            _db.Entry(item).State = EntityState.Modified;
+            _db.Feeds.Update(item);
             Save();
         }
 
         public Feed GetBy(string url)
         {
             return _db.Feeds.FirstOrDefault(feed => feed.Url == url);
-        }
-
-        public bool ContainsItem(Feed contains, User item)
-        {
-            return _db.Feeds.Include(c => c.Users).ToList().
-                FirstOrDefault(feed => feed.Id == contains.Id)
-                .Users.Select(u => u.Id).Contains(item.Id);
-        }
-
-        public void AddItemToContains(Feed contains, User item)
-        {
-            contains.Users.Add(item);
-            Save();
-        }
-
-        public void RemoveItemFromContains(Feed contains, User item)
-        {
-            var dbuser = _db.Users.Include(c => c.Feeds).ToList()
-                .FirstOrDefault(user => user.Id == item.Id);
-            Feed dbFeed = _db.Feeds.FirstOrDefault(feed => feed.Id == contains.Id);
-            dbuser.Feeds.Remove(dbFeed);
-            Save();
-        }
-
-        public User GetContainedItemBy(string email)
-        {
-            return _db.Users.FirstOrDefault(user => user.Email == email);
         }
     }
 }

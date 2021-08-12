@@ -1,19 +1,16 @@
 ﻿using Microsoft.Extensions.Hosting;
 using System;
+using System.Threading.Tasks;
 
 namespace Phytime.Models
 {
-    public interface IRepository<T, P> : IDisposable
+    public interface IRepository<T> : IDisposable
     {
         T Get(int id);
+        T GetBy(string parameter);
         void Add(T item);
         void Update(T item);
         T GetInclude(T item);
-        T GetBy(string parameter);
-        bool ContainsItem(T contains, P item);
-        void AddItemToContains(T contains, P item);
-        void RemoveItemFromContains(T contains, P item);
-        P GetContainedItemBy(string parameter);
         void Save();
     }
 }

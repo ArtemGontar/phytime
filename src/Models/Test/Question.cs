@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Phytime.Models
+namespace Phytime.Models.Test
 {
     public class Question
     {

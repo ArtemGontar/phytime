@@ -12,7 +12,7 @@ namespace UnitTestApp.Tests.Controllers
     public class TestControllerTests
     {
         [Fact]
-        public void StartTest_Returns5Questions_Returned5()
+        public void StartTest_ReturnsFiveQuestions_ReturnedFive()
         {
             var option = Options.Create(new ConnectionStringsOptions() { TestsConnection = "https://opentdb.com/api.php?" });
             var controller = new TestController(option);
@@ -29,7 +29,7 @@ namespace UnitTestApp.Tests.Controllers
         }
 
         [Fact]
-        public void CheckTest_Returns1Point_1Point()
+        public void CheckTest_ReturnsOnePoint_OnePoint()
         {
             var configurationMock = new Mock<IOptions<ConnectionStringsOptions>> ();
             var controller = new TestController(configurationMock.Object);

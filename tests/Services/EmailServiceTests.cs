@@ -13,7 +13,7 @@ namespace UnitTestApp.Tests.Services
         public void FormEmailMessage_MessageFieldsEqualsToInputData_True()
         {
             var option = Options.Create(new EmailServiceOptions() { Email = "adminEmail" });
-            var repositoryMock = new Mock<IRepository<Feed, User>>();
+            var repositoryMock = new Mock<IRepository<Feed>>();
             var service = new EmailService(option, repositoryMock.Object);
             string email = "testMail";
             string sub = "testSubject";

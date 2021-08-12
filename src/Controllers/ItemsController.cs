@@ -15,9 +15,9 @@ namespace Phytime.Controllers
     public class ItemsController : Controller
     {
         private const int FirstValidId = 1;
-        private readonly IRepository<Feed, User> _feedRepository;
+        private readonly IRepository<Feed> _feedRepository;
 
-        public ItemsController(IRepository<Feed, User> repository = null)
+        public ItemsController(IRepository<Feed> repository = null)
         {
             _feedRepository = repository ?? new FeedRepository();
         }

@@ -4,11 +4,10 @@ using Microsoft.Extensions.Options;
 using Phytime.Models;
 using Phytime.ViewModels;
 using System;
-using System.Collections.Generic;
+using Phytime.Models.Test;
 using System.Linq;
 using System.Net;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace Phytime.Controllers
 {
@@ -34,11 +33,11 @@ namespace Phytime.Controllers
             {
                 throw new ArgumentException(nameof(count));
             }
-            if(!difficulty.Equals("easy") && !difficulty.Equals("medium") && !difficulty.Equals("hard"))
+            if(!difficulty.Equals(Difficulty.Easy) && !difficulty.Equals(Difficulty.Medium) && !difficulty.Equals(Difficulty.Hard))
             {
                 throw new ArgumentException(nameof(difficulty));
             }
-            if (!type.Equals("multiple") && !type.Equals("boolean"))
+            if (!type.Equals(Models.Test.Type.Multiple) && !type.Equals(Models.Test.Type.Boolean))
             {
                 throw new ArgumentException(nameof(type));
             }
