@@ -6,11 +6,15 @@ using System.ServiceModel.Syndication;
 using System.Xml;
 using Phytime.Services;
 using System;
+using Phytime.ViewModels;
 
 namespace Phytime.Controllers
 {
     public class FeedController : Controller
     {
+        public const int DefaultPage = 1;
+        public const string DefaultSortValue = "Newest";
+
         private readonly IRepository<Feed> _feedRepository;
         private readonly IRepository<User> _userRepository;
 
@@ -20,35 +24,36 @@ namespace Phytime.Controllers
             _userRepository = userRepository ?? new UserRepository(context);
         }
 
-        public ActionResult RssFeed(string url, int page)
+        public IActionResult RssFeed(string url, int page = DefaultPage, string sortValue = DefaultSortValue)
         {
-            if (string.IsNullOrEmpty(url))
-            {
-                throw new ArgumentNullException(nameof(url));
-            }
-            if (page < 1)
-            {
-                throw new ArgumentException(nameof(page));
-            }
-            ViewBag.Subscribed = IsSubscribed(url);
-            var feedItems = GetSyndicationItems(url);
-            if(Request.HasFormContentType)
-            {
-                var selectedSort = Request.Form["SortValue"].ToString();
-                var sorterer = new FeedSorterer();
-                sorterer.SortFeed(selectedSort, ref feedItems);
-            }
-            var rssFeed = FormFeed(url, page, feedItems);
-            return View(rssFeed);
+            var viewModel = CreateViewModel(url, sortValue, page);
+            return View(viewModel);
         }
 
-        public Feed FormFeed(string url, int page, List<SyndicationItem> items)
+        public IActionResult Sort(FeedViewModel model)
+        {
+            return RedirectToAction("RssFeed", new { url = model.FeedValue.Url, 
+                page = DefaultPage, model.SortValue});
+        }
+
+        public FeedViewModel CreateViewModel(string url, string sortValue, int page)
+        {
+            ViewBag.Subscribed = IsSubscribed(url);
+            var feedItems = GetSyndicationItems(url);
+            var sorterer = new FeedSorterer();
+            sorterer.SortFeed(sortValue, ref feedItems);
+            var rssFeedViewModel = FormFeed(url, page, feedItems);
+            rssFeedViewModel.SortValue = sortValue;
+            return rssFeedViewModel;
+        }
+
+        public FeedViewModel FormFeed(string url, int page, List<SyndicationItem> items)
         {
             if (string.IsNullOrEmpty(url))
             {
                 throw new ArgumentNullException(nameof(url));
             }
-            if (page < 1)
+            if (page < DefaultPage)
             {
                 throw new ArgumentException(nameof(page));
             }
@@ -57,11 +62,10 @@ namespace Phytime.Controllers
                 throw new ArgumentNullException(nameof(items));
             }
             PageInfo pageInfo = new PageInfo { PageNumber = page, TotalItems = items.Count };
-            IEnumerable<SyndicationItem> itemsPerPages = items.Skip((page - 1) * pageInfo.PageSize).Take(pageInfo.PageSize);
+            var itemsPerPages =  items.Skip((page - 1) * pageInfo.PageSize).Take(pageInfo.PageSize);
             Feed rssFeed = _feedRepository.GetBy(url);
-            rssFeed.PageInfo = pageInfo;
-            rssFeed.SyndicationItems = itemsPerPages;
-            return rssFeed;
+            var model = new FeedViewModel() { FeedValue = rssFeed, PageInfo = pageInfo, SyndicationItems = itemsPerPages.ToList() };
+            return model;
         }
 
         public List<SyndicationItem> GetSyndicationItems(string url)
@@ -103,7 +107,7 @@ namespace Phytime.Controllers
             var user = _userRepository.GetBy(HttpContext.User.Identity.Name);
             _feedRepository.GetBy(url).Users.Add(user);
             _feedRepository.Save();
-            return RedirectToAction("RssFeed", new { url = url, page = 1});
+            return RedirectToAction("RssFeed", new { url = url, page = DefaultPage });
         }
 
         public IActionResult Unsubscribe(string url)
@@ -117,7 +121,7 @@ namespace Phytime.Controllers
             var user = _userRepository.GetBy(HttpContext.User.Identity.Name);
             feed.Users.Remove(user);
             _feedRepository.Save();
-            return RedirectToAction("RssFeed", new { url = url, page = 1 });
+            return RedirectToAction("RssFeed", new { url = url, page = DefaultPage });
         }
 
         public RedirectResult Logout()

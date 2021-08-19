@@ -1,32 +1,32 @@
 ﻿@using System.ServiceModel.Syndication;
-@using Phytime.Models;
+@using Phytime.ViewModels;
 @using Phytime.Helpers;
-@model Feed;
+@model FeedViewModel;
 @{
     ViewBag.Title = "RssFeed";
 }
 <div style="margin-bottom: 10px;">
     @if (ViewBag.Subscribed)
     {
-        <a href="@Url.Action("Unsubscribe", "Feed", new { url = Model.Url })" class="btn btn-sm btn-danger">Unsubscribe</a>
+        <a href="@Url.Action("Unsubscribe", "Feed", new { url = Model.FeedValue.Url })" class="btn btn-sm btn-danger">Unsubscribe</a>
     }
     else
     {
-        <a href="@Url.Action("Subscribe", "Feed", new { url = Model.Url })" class="btn btn-sm btn-success">Subscribe</a>
+        <a href="@Url.Action("Subscribe", "Feed", new { url = Model.FeedValue.Url })" class="btn btn-sm btn-success">Subscribe</a>
     }
-    <a href="@Url.Action("ChangeOrder", "Feed")" class="btn btn-sm btn-primary">Change order</a>
-    <a href="@Url.Action("ShowAngular", "Feed", new { id = Model.Id })" class="btn btn-sm btn-primary">Show in angular</a>
+    <a href="@Url.Action("ShowAngular", "Feed", new { id = Model.FeedValue.Id })" class="btn btn-sm btn-primary">Show in angular</a>
 </div>
-@using (Html.BeginForm("RssFeed", "Feed", new { url = Model.Url, page = 1 }))
+@using (Html.BeginForm("Sort", "Feed"))
 {
-    @Html.DropDownList("SortValue", new List<SelectListItem>
-    {
-       new SelectListItem{ Text="Newest", Value = "Newest" },
-       new SelectListItem{ Text="Oldest", Value = "Oldest" },
-       new SelectListItem{ Text="Last week", Value = "Last week" },
-       new SelectListItem{ Text="Last month", Value = "Last month" }
-    })
-
+    @Html.HiddenFor(x => x.FeedValue.Url, Model.FeedValue.Url);
+    @Html.HiddenFor(x => x.PageInfo.PageNumber, 1);
+    @Html.DropDownListFor(model => model.SortValue, new List<SelectListItem>
+        {
+           new SelectListItem{ Text="Newest", Value = "Newest" },
+           new SelectListItem{ Text="Oldest", Value = "Oldest" },
+           new SelectListItem{ Text="Last week", Value = "Last week" },
+           new SelectListItem{ Text="Last month", Value = "Last month" }
+        }, Model.SortValue)
     <input type="submit" value="Submit" />
 }
 <hr />
@@ -37,7 +37,7 @@
             @item.Title.Text
         </a>
         <ins>@item.PublishDate.ToString("D")</ins>
-</div>
+    </div>
     <div>
         <p>
             @item.Summary.Text
@@ -46,7 +46,7 @@
 }
 
 <div class="btn-group">
-    @PagingHelper.PageLinks(Html, Model.PageInfo, x => Url.Action("RssFeed", new { url = Model.Url, page = x }))
+    @PagingHelper.PageLinks(Html, Model.PageInfo, x => Url.Action("RssFeed", new { url = Model.FeedValue.Url, sortValue = Model.SortValue, page = x }))
 </div>
 
 <style>

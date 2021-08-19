@@ -1,4 +1,6 @@
 ﻿@using Phytime.Services
+@using Phytime.Models
+@using Phytime.ViewModels
 @model RssSource
 @{
     ViewBag.Title = "Index";
@@ -8,6 +10,6 @@
 <h4>List contains @(Model.Urls.Count) elements</h4>
 @for (int i = 0; i < Model.Urls.Count; i++)
 {
-    @Html.ActionLink((string)Model.Titles[i], "RssFeed", "Feed", new { url = (string)Model.Urls[i], page = 1 })
+    @Html.ActionLink((string)Model.Titles[i], "RssFeed", "Feed", new { url = (string)Model.Urls[i] })
     <br />
 }
