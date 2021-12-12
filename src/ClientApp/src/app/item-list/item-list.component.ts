@@ -1,7 +1,7 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { DataService } from './data.service';
-import { Item } from './item';
+import { FeedService } from '../feed.service';
+import { Item } from '../models/item';
  
 @Component({
     templateUrl: './item-list.component.html'
@@ -10,7 +10,7 @@ export class ItemListComponent implements OnInit {
 
     id: number;
     items: Item[];
-    constructor(private dataService: DataService, private router: Router, activeRoute: ActivatedRoute) {
+    constructor(private dataService: FeedService, private router: Router, activeRoute: ActivatedRoute) {
         this.id = Number.parseInt(activeRoute.snapshot.params["id"]);
     }
  
