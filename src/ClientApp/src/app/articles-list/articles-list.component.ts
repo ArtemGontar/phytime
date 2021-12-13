@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FeedService} from "../feed.service";
-import {Article} from "../models/article";
-import {ActivatedRoute, Router} from "@angular/router";
+import {Source} from "../models/sources";
 
 @Component({
   selector: 'articles-list',
@@ -9,9 +8,7 @@ import {ActivatedRoute, Router} from "@angular/router";
   styleUrls: ['./articles-list.component.css']
 })
 export class ArticlesListComponent implements OnInit {
-
-  id: number;
-  items: Article[];
+  sources: Object;
 
   constructor(private dataService: FeedService) {
   }
@@ -21,7 +18,9 @@ export class ArticlesListComponent implements OnInit {
   }
 
   load() {
-    this.items = [];
-    this.dataService.getFeeds().subscribe((data: Article[]) => this.items = data);
+    this.sources = null;
+    this.dataService.getFeeds().subscribe((data: Sources) => {
+      this.sources = data
+    });
   }
 }

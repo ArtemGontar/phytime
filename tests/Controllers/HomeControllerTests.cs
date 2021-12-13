@@ -17,8 +17,7 @@ namespace UnitTestApp.Tests.Controllers
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsAssignableFrom<RssSource>(
                 viewResult.Model);
-            Assert.NotEmpty(model.Titles);
-            Assert.NotEmpty(model.Urls);
+            Assert.NotEmpty(model.Sources);
         }
     }
 }

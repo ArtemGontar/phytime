@@ -74,8 +74,9 @@ namespace Phytime
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseEndpoints(routes =>
+            app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers();
             });
 
             app.UseSpa(spa =>

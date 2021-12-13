@@ -11,8 +11,8 @@ using System.Xml;
 namespace Phytime.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
-    public class ItemsController : Controller
+    [Route("api/items")]
+    public class ItemsController : ControllerBase
     {
         private const int FirstValidId = 1;
         private readonly IRepository<Feed> _feedRepository;
@@ -61,19 +61,18 @@ namespace Phytime.Controllers
             {
                 throw new ArgumentNullException(nameof(list));
             }
-            var itemsList = new List<Item>();
-            foreach(var item in list)
-            {
-                itemsList.Add(new Item { Title = item.Title.Text, 
-                    Summary = item.Summary.Text, Publishdate = item.PublishDate.ToString("D") });
-            }
-            return itemsList;
-        }
 
-        protected override void Dispose(bool disposing)
-        {
-            _feedRepository.Dispose();
-            base.Dispose(disposing);
+            var itemsList = new List<Item>();
+            foreach (var item in list)
+            {
+                itemsList.Add(new Item
+                {
+                    Title = item.Title.Text,
+                    Summary = item.Summary.Text, Publishdate = item.PublishDate.ToString("D")
+                });
+            }
+
+            return itemsList;
         }
     }
 }

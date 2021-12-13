@@ -49,12 +49,12 @@ namespace Phytime.Services
 
         public void CheckUrls(object state)
         {
-            foreach (var url in _rssSource.Urls)
+            foreach (var source in _rssSource.Sources)
             {
-                XmlReader reader = XmlReader.Create(url);
+                XmlReader reader = XmlReader.Create(source.Url);
                 SyndicationFeed feed = SyndicationFeed.Load(reader);
                 reader.Close();
-                var rssFeed = _feedRepository.GetBy(url);
+                var rssFeed = _feedRepository.GetBy(source.Url);
                 if (rssFeed != null)
                 {
                     if (rssFeed.ItemsCount != feed.Items.ToList().Count)
@@ -66,8 +66,8 @@ namespace Phytime.Services
                 //needs to be moved to new class
                 else
                 {
-                    _feedRepository.Add(new Feed { Title = _rssSource.Titles[_rssSource.Urls.IndexOf(url)],
-                        Url = url, ItemsCount = feed.Items.ToList().Count });
+                    _feedRepository.Add(new Feed { Title = source.Title,
+                        Url = source.Url, ItemsCount = feed.Items.ToList().Count });
                 }
             }
         }
