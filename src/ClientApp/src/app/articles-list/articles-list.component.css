@@ -13,12 +13,18 @@
   flex-direction: column;
   margin: 20px 20px;
   height: 100px;
-  width: 200px;
+  width: 220px;
   border: 3px solid #8e78fd;
-  
   justify-content: center;
+  cursor: pointer;
 }
 
 .source-link{
   text-align: center;
+  margin: 0 10px;
+  font-size: 20px;
+}
+
+a{
+  color: black;
 }
