@@ -9,7 +9,8 @@ import { NotFoundComponent } from './not-found.component';
 import { FeedService } from './feed.service';
 import { CitationComponent } from './citation/citation.component';
 import { ArticlesListComponent } from './articles-list/articles-list.component';
-import { HomeComponent } from './home/home.component';
+import { HomeComponent } from './home/home.component';;
+import { ArticleComponent } from './article/article.component'
 
 const appRoutes: Routes = [
     { path: '', component: HomeComponent },
@@ -18,7 +19,7 @@ const appRoutes: Routes = [
 
 @NgModule({
     imports: [BrowserModule, FormsModule, HttpClientModule, RouterModule.forRoot(appRoutes)],
-    declarations: [AppComponent, ItemListComponent, NotFoundComponent, CitationComponent, ArticlesListComponent, HomeComponent],
+    declarations: [AppComponent, ItemListComponent, NotFoundComponent, CitationComponent, ArticlesListComponent, HomeComponent, ArticleComponent],
     providers: [FeedService], 
     bootstrap: [AppComponent]
 })

@@ -11,8 +11,8 @@ using Phytime.ViewModels;
 namespace Phytime.Controllers
 {
     [ApiController]
-    [Route("api/feed")]
-    public class FeedController : ControllerBase
+    [Route("api/rss")]
+    public class RssController : ControllerBase
     {
         public const int DefaultPage = 1;
         public const string DefaultSortValue = "Newest";
@@ -21,7 +21,7 @@ namespace Phytime.Controllers
         private readonly IRepository<Feed> _feedRepository;
         private readonly IRepository<User> _userRepository;
 
-        public FeedController(PhytimeContext context,
+        public RssController(PhytimeContext context,
             IRepository<Feed> feedRepository = null, 
             IRepository<User> userRepository = null)
         {
@@ -31,16 +31,17 @@ namespace Phytime.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetRss()
+        public IActionResult GetRssList()
         {
             return Ok(_rssSource);
         }
         
-        // public IActionResult RssFeed(string url, int page = DefaultPage, string sortValue = DefaultSortValue)
-        // {
-        //     var viewModel = CreateViewModel(url, sortValue, page);
-        //     return View(viewModel);
-        // }
+        [HttpGet("some")]
+        public IActionResult GetRss(string url, int page = DefaultPage, string sortValue = DefaultSortValue)
+        {
+            var viewModel = CreateViewModel(url, sortValue, page);
+            return Ok(viewModel);
+        }
         
         // public IActionResult Sort(FeedViewModel model)
         // {

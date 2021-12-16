@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 export class FeedService {
 
     private itemsUrl = "/api/items/";
-    private feedUrl = "/api/feed/"
+    private feedUrl = "/api/rss/"
 
     constructor(private http: HttpClient) {
     }
@@ -14,7 +14,11 @@ export class FeedService {
         return this.http.get(this.itemsUrl + id);
     }
 
-    getFeeds() {
+    getRssList() {
         return this.http.get(this.feedUrl);
+    }
+
+    getRssByUrl(url: string) {
+        return this.http.get(this.feedUrl + "some?url=" + url);
     }
 }

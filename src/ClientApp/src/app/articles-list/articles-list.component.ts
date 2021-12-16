@@ -19,9 +19,15 @@ export class ArticlesListComponent implements OnInit {
 
   load() {
     this.sources = null;
-    this.dataService.getFeeds().subscribe((data: Object) => {
-      console.log(data)
+    this.dataService.getRssList().subscribe((data: Object) => {
+      console.log(data);
       this.sources = data
     });
+  }
+
+  openSourceFeed(url: string){
+    this.dataService.getRssByUrl(url).subscribe((data: Object) => {
+      console.log(data);
+    })
   }
 }
