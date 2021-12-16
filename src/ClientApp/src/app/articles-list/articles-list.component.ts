@@ -19,7 +19,8 @@ export class ArticlesListComponent implements OnInit {
 
   load() {
     this.sources = null;
-    this.dataService.getFeeds().subscribe((data: Sources) => {
+    this.dataService.getFeeds().subscribe((data: Object) => {
+      console.log(data)
       this.sources = data
     });
   }

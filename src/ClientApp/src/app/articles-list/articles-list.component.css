@@ -1,0 +1,24 @@
+.main{
+  background: #f4f2ff;
+  border-radius: 3px;
+  border: 3px solid #8e78fd;
+  padding: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1;
+  justify-content: center;
+}
+.source-item {
+  display: flex;
+  flex-direction: column;
+  margin: 20px 20px;
+  height: 100px;
+  width: 200px;
+  border: 3px solid #8e78fd;
+  
+  justify-content: center;
+}
+
+.source-link{
+  text-align: center;
+}
