@@ -1,6 +1,6 @@
 
 <div class="main">
-    <div class="source-item" *ngFor="let source of sources.sources">
+    <div class="source-item" *ngFor="let source of sources">
         <div (click)="openSourceFeed(source.url)" class="source-link">
            <a>{{source.title}}</a>
         </div>

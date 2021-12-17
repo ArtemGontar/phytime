@@ -14,6 +14,7 @@ import { ArticleComponent } from './article/article.component'
 
 const appRoutes: Routes = [
     { path: '', component: HomeComponent },
+    { path: 'a', component: ArticleComponent },
     { path: 'angular/:id', component: ItemListComponent }
 ];
 

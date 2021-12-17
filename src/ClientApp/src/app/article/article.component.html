@@ -26,25 +26,13 @@
 } -->
 <hr />
 
-<div *ngFor="let item of feedViewModel">
-    <a href="item.Links[0].Uri">
-        {{ item.Title.Text }}
-    </a>
-    <ins>{{ item.PublishDate }}</ins>
-</div>
-<div>
-    <p>
-        {{ item.Summary.Text }}
-    </p>
+<div *ngFor="let item of feed.syndicationItems">
+    <a> {{item.title.text}} </a>
+    <ins> {{item.publishDate}} </ins>
+  <div>
+      <p> {{item.summary.text}} </p>
+  </div>
 </div>
 
-
-<!-- <div class="btn-group">
-  @PagingHelper.PageLinks(Html, Model.PageInfo, x => Url.Action("RssFeed", new { url = Model.FeedValue.Url, sortValue = Model.SortValue, page = x }))
-</div> -->
-
-<style>
-  .selected {
-      background-color: #0094ff;
-  }
-</style>
+<div (click)="nextArticles('', 1, '')" class="next-articles">
+</div>

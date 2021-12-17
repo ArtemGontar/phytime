@@ -8,7 +8,7 @@ import {Source} from "../models/sources";
   styleUrls: ['./articles-list.component.css']
 })
 export class ArticlesListComponent implements OnInit {
-  sources: Object;
+  sources: Source[];
 
   constructor(private dataService: FeedService) {
   }
@@ -19,14 +19,14 @@ export class ArticlesListComponent implements OnInit {
 
   load() {
     this.sources = null;
-    this.dataService.getRssList().subscribe((data: Object) => {
+    this.dataService.getRssList().subscribe((data: Source[]) => {
       console.log(data);
       this.sources = data
     });
   }
 
-  openSourceFeed(url: string){
-    this.dataService.getRssByUrl(url).subscribe((data: Object) => {
+  openSourceFeed(url: string, page: number, sortValue: string){
+    this.dataService.getRssByUrl(url, page, sortValue).subscribe((data: Object) => {
       console.log(data);
     })
   }

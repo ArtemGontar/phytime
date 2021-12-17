@@ -14,6 +14,7 @@ namespace Phytime.Services
 
         public FeedViewModel GetSourceByUrl(string url, string sortValue, int page);
     }
+    
     public class RssService : IRssService
     {
         public const int DefaultPage = 1;

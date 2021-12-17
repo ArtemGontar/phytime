@@ -7,7 +7,6 @@ namespace Phytime.Models
 {
     public class Feed
     {
-        public Feed() { }
         public int Id { get; set; }
         public string Title { get; set; }
         public string Url { get; set; }

@@ -18,7 +18,10 @@ export class FeedService {
         return this.http.get(this.feedUrl);
     }
 
-    getRssByUrl(url: string) {
-        return this.http.get(this.feedUrl + "some?url=" + url);
+    getRssByUrl(url: string, page: number, sortValue:  string) {
+        return this.http.get(this.feedUrl 
+            + "some?url=" + url 
+            + "&page=" + page
+            + "&sortValue=" + sortValue);
     }
 }

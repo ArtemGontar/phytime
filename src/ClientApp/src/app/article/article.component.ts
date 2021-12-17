@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FeedViewModel } from '../models/rss';
+import { Feed } from '../models/rss';
+import {FeedService} from "../feed.service";
+
 @Component({
   selector: 'article',
   templateUrl: './article.component.html',
@@ -7,16 +9,33 @@ import { FeedViewModel } from '../models/rss';
 })
 export class ArticleComponent implements OnInit {
 
-  constructor() { }
+  constructor(private dataService: FeedService) { }
 
-  feedViewModel: FeedViewModel = {
-    FeedValue: null,
-    PageInfo: null,
-    SortValue: null,
-    SyndicationItems: null
+  feed: Feed = {
+    feedValue: {
+      id: 1,
+      title: "title",
+      url: "www.google.com",
+      itemsCount: 150,
+      users: []
+    },
+    pageInfo: 1,
+    sortValue: null,
+    syndicationItems: [{
+      title: {
+        text: "text"
+      },
+      publishDate: "22222",
+      summary: {
+        text: "summary"
+      }
+    }]
   }
-
   ngOnInit(): void {
   }
-
+  nextArticles(url: string, page: number, sortValue: string){
+    this.dataService.getRssByUrl(url, page, sortValue).subscribe((data: Object) => {
+      console.log(data);
+    })
+  }
 }

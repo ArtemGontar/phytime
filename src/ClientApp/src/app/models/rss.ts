@@ -1,9 +1,9 @@
-export class FeedViewModel
+export class Feed
 {
   constructor(
-    public FeedValue?: Object, 
-    public SortValue?: string, 
-    public SyndicationItems?: Object[],
-    public PageInfo?: Object
+    public feedValue?: Object, 
+    public sortValue?: string, 
+    public syndicationItems?: Object[],
+    public pageInfo?: Object
     ) { }
 }
