@@ -1,0 +1,11 @@
+<div (click)="openArticle()" class="article" *ngFor="let item of feed.syndicationItems">
+    <h3> {{item.title.text}} </h3>
+  <div class="article-summary-text">
+      <p> {{item.summary.text}} </p>
+  </div>
+  <div class="article-publish-date"> {{item.publishDate}} </div>
+
+</div>
+
+<div (click)="nextArticles('', 1, '')" class="next-articles">
+</div>

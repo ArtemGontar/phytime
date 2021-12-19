@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
+using Phytime.Models;
 
 namespace Phytime.Services
 {
@@ -13,16 +15,13 @@ namespace Phytime.Services
         const string regularExpressionPatternLinks = @"\bhttps://[^<]*";
         const string containsForTitle = "</th>";
         const string containsForUrl = ".rss</a>";
-
-        public List<string> Titles { get; private set; }
-        public List<string> Urls { get; private set; }
+        public List<Source> Sources { get; private set; }
 
         private static RssSource instance;
 
         private RssSource()
         {
-            Titles = GetTitles();
-            Urls = GetUrls();
+            Sources = GetFeedSources();
         }
 
         public static RssSource getInstance()
@@ -32,25 +31,33 @@ namespace Phytime.Services
             return instance;
         }
 
-        private List<string> GetTitles()
+        private List<Source> GetFeedSources()
         {
-            return GetList(regularExpressionPatternTitles, containsForTitle,
+            var titles = GetList(regularExpressionPatternTitles, containsForTitle,
                 (regex, line, list) =>
                 {
                     MatchCollection collection = regex.Matches(line);
                     Match m = collection[0];
                     list.Add(m.Groups[1].Value);
                 });
-        }
-
-        private List<string> GetUrls()
-        {
-            return GetList(regularExpressionPatternLinks, containsForUrl,
+            var urls = GetList(regularExpressionPatternLinks, containsForUrl, 
                 (regex, line, list) =>
                 {
                     Match match = regex.Match(line);
                     list.Add(match.Value);
                 });
+
+            var sources = new List<Source>();
+            for (var i = 0; i < titles.Count; i++)
+            {
+                sources.Add(new Source()
+                {
+                    Title = titles[i],
+                    Url = urls[i]
+                });
+            }
+
+            return sources;
         }
 
         private List<string> GetList(string regularExpressionPattern, string containsFor,

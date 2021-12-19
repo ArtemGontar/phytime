@@ -12,11 +12,11 @@ namespace Phytime.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserRepository _userRepository;
+        private readonly IRepository<User> _userRepository;
 
-        public AccountController()
+        public AccountController(IRepository<User> userRepository)
         {
-            _userRepository = new UserRepository();
+            _userRepository = userRepository;
         }
 
         [HttpGet]

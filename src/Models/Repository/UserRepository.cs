@@ -1,31 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Phytime.Models
 {
     public class UserRepository : IRepository<User>
     {
-        private PhytimeContext _db;
-        private const string ConnectionString = "Server=(localdb)\\mssqllocaldb;Database=phytime2021db;Trusted_Connection=True;";
-
-        public UserRepository()
-        {
-            var options = new DbContextOptionsBuilder<PhytimeContext>();
-            options.UseSqlServer(ConnectionString);
-            _db = new PhytimeContext(options.Options);
-        }
+        private PhytimeContext _context;
 
         public UserRepository(PhytimeContext context)
         {
-            _db = context;
+            _context = context;
         }
 
         public void Add(User item)
         {
-            _db.Users.Add(item);
+            _context.Users.Add(item);
             Save();
         }
 
@@ -43,7 +33,7 @@ namespace Phytime.Models
             {
                 if (disposing)
                 {
-                    _db.Dispose();
+                    _context.Dispose();
                 }
             }
             this._disposed = true;
@@ -51,27 +41,27 @@ namespace Phytime.Models
 
         public User Get(int id)
         {
-            return _db.Users.Find(id);
+            return _context.Users.Find(id);
         }
 
         public User GetBy(string email)
         {
-            return _db.Users.FirstOrDefault(user => user.Email == email);
+            return _context.Users.FirstOrDefault(user => user.Email == email);
         }
 
         public User GetInclude(User item)
         {
-            return _db.Users.Include(u => u.Feeds).FirstOrDefault(u => u.Id == item.Id);
+            return _context.Users.Include(u => u.Feeds).FirstOrDefault(u => u.Id == item.Id);
         }
 
         public void Save()
         {
-            _db.SaveChanges();
+            _context.SaveChanges();
         }
 
         public void Update(User item)
         {
-            _db.Entry(item).State = EntityState.Modified;
+            _context.Entry(item).State = EntityState.Modified;
             Save();
         }
     }
