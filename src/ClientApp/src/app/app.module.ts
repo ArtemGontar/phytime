@@ -14,13 +14,12 @@ import { ArticleComponent } from './article/article.component'
 
 const appRoutes: Routes = [
     { path: '', component: HomeComponent },
-    { path: 'a', component: ArticleComponent },
-    { path: 'angular/:id', component: ItemListComponent }
+    { path: 'articles', component: ArticleComponent }
 ];
 
 @NgModule({
     imports: [BrowserModule, FormsModule, HttpClientModule, RouterModule.forRoot(appRoutes)],
-    declarations: [AppComponent, ItemListComponent, NotFoundComponent, CitationComponent, ArticlesListComponent, HomeComponent, ArticleComponent],
+    declarations: [AppComponent, NotFoundComponent, CitationComponent, ArticlesListComponent, HomeComponent, ArticleComponent],
     providers: [FeedService], 
     bootstrap: [AppComponent]
 })

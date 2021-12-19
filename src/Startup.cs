@@ -28,6 +28,7 @@ namespace Phytime
         public void ConfigureServices(IServiceCollection services)
         {
             string connection = Configuration.GetConnectionString("DefaultConnection");
+
             services.AddDbContext<PhytimeContext>(options => options.UseSqlServer(connection));
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -48,13 +49,16 @@ namespace Phytime
             services.Configure<ConnectionStringsOptions>(Configuration.GetSection(
                                         ConnectionStringsOptions.ConnectionStrings));
 
-            services.AddDistributedMemoryCache();
+            //services.AddDistributedMemoryCache();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
+            services.AddScoped<IRepository<Feed>, FeedRepository>();
+            services.AddScoped<IRepository<User>, UserRepository>();
+            services.AddScoped<IRssService, RssService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            services.AddHostedService<EmailService>();
+            //services.AddHostedService<EmailService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

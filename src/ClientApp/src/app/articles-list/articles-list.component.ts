@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import {FeedService} from "../feed.service";
 import {Source} from "../models/sources";
 
@@ -10,7 +11,7 @@ import {Source} from "../models/sources";
 export class ArticlesListComponent implements OnInit {
   sources: Source[];
 
-  constructor(private dataService: FeedService) {
+  constructor(private router: Router, private dataService: FeedService) {
   }
 
   ngOnInit() {
@@ -25,9 +26,15 @@ export class ArticlesListComponent implements OnInit {
     });
   }
 
-  openSourceFeed(url: string, page: number, sortValue: string){
-    this.dataService.getRssByUrl(url, page, sortValue).subscribe((data: Object) => {
-      console.log(data);
-    })
+  openArticles(source: Source){
+    this.router.navigate(['/articles'], 
+    {
+      state: {
+        source: {
+          title: source.title,
+          url: source.url
+        }
+      },
+    });
   }
 }

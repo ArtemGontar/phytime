@@ -1,12 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using Phytime.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.ServiceModel.Syndication;
-using System.Xml;
 using Phytime.Services;
-using System;
-using Phytime.ViewModels;
 
 namespace Phytime.Controllers
 {
@@ -32,7 +27,7 @@ namespace Phytime.Controllers
         [HttpGet]
         public IActionResult GetRssList()
         {
-            return Ok(_rssSource);
+            return Ok(_rssSource.Sources);
         }
         
         [HttpGet("some")]
