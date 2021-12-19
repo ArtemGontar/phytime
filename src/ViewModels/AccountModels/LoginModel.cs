@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Phytime.ViewModels
+namespace Phytime.ViewModels.AccountModels
 {
     public class LoginModel
     {

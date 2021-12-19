@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Phytime.Models.Test;
 
-namespace Phytime.ViewModels
+namespace Phytime.ViewModels.TestModels
 {
     public class TestModel
     {

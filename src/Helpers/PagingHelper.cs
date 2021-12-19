@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Phytime.Models;
+using Phytime.Models.Feed;
 
 namespace Phytime.Helpers
 {

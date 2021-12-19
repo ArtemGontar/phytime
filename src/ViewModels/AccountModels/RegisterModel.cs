@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Phytime.ViewModels
+namespace Phytime.ViewModels.AccountModels
 {
     public class RegisterModel
     {

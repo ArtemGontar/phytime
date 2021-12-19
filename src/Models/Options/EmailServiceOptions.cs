@@ -1,4 +1,4 @@
-﻿namespace Phytime.Models
+﻿namespace Phytime.Models.Options
 {
     public class EmailServiceOptions
     {

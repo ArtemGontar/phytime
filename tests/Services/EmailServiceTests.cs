@@ -4,6 +4,9 @@ using Phytime.Services;
 using Phytime.Models;
 using MimeKit;
 using Microsoft.Extensions.Options;
+using Phytime.Models.Feed;
+using Phytime.Models.Options;
+using Phytime.Repository;
 
 namespace UnitTestApp.Tests.Services
 {

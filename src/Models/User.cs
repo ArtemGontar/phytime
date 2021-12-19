@@ -13,7 +13,7 @@ namespace Phytime.Models
             PasswordHash = GetHashString(value).ToString();
         }
 
-        public List<Feed> Feeds { get; set; } = new List<Feed>();
+        public List<Feed.Feed> Feeds { get; set; } = new List<Feed.Feed>();
 
         private Guid GetHashString(string s)
         {

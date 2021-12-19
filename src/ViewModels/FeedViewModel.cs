@@ -1,6 +1,7 @@
 ﻿using Phytime.Models;
 using System.Collections.Generic;
 using System.ServiceModel.Syndication;
+using Phytime.Models.Feed;
 
 namespace Phytime.ViewModels
 {

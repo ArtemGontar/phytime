@@ -11,6 +11,9 @@ using System.Linq;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using Microsoft.Extensions.Options;
+using Phytime.Models.Feed;
+using Phytime.Models.Options;
+using Phytime.Repository;
 
 namespace Phytime.Services
 {

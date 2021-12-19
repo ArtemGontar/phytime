@@ -1,4 +1,4 @@
-﻿namespace Phytime.ViewModels
+﻿namespace Phytime.ViewModels.TestModels
 {
     public class TestResultModel
     {

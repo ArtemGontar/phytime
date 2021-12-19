@@ -4,6 +4,8 @@ using System.Linq;
 using System.ServiceModel.Syndication;
 using System.Xml;
 using Phytime.Models;
+using Phytime.Models.Feed;
+using Phytime.Repository;
 using Phytime.ViewModels;
 
 namespace Phytime.Services
