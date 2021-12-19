@@ -1,33 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Phytime.Models
 {
-    public class FeedRepository : IRepository<Feed>
+  public class FeedRepository : IRepository<Feed>
     {
-        private PhytimeContext _db;
-        private const string ConnectionString = "Server=localhost;Database=phytime2021db;User Id=SA;Password=TUTdm83b7L1";
-
-        public FeedRepository()
-        {
-            var options = new DbContextOptionsBuilder<PhytimeContext>();
-            options.UseSqlServer(ConnectionString);
-            _db = new PhytimeContext(options.Options);
-        }
+        private PhytimeContext _context;
 
         public FeedRepository(PhytimeContext context)
         {
-            _db = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public void Add(Feed item)
         {
-            _db.Feeds.Add(item);
+            _context.Feeds.Add(item);
             Save();
         }
 
@@ -45,7 +33,7 @@ namespace Phytime.Models
             {
                 if (disposing)
                 {
-                    _db.Dispose();
+                    _context.Dispose();
                 }
             }
             this._disposed = true;
@@ -53,28 +41,28 @@ namespace Phytime.Models
 
         public Feed Get(int id)
         {
-            return _db.Feeds.Find(id);
+            return _context.Feeds.Find(id);
         }
 
         public Feed GetInclude(Feed item)
         {
-            return _db.Feeds.Include(f => f.Users).FirstOrDefault(f => f.Id == item.Id);
+            return _context.Feeds.Include(f => f.Users).FirstOrDefault(f => f.Id == item.Id);
         }
 
         public void Save()
         {
-            _db.SaveChanges();
+            _context.SaveChanges();
         }
 
         public void Update(Feed item)
         {
-            _db.Feeds.Update(item);
+            _context.Feeds.Update(item);
             Save();
         }
 
         public Feed GetBy(string url)
         {
-            return _db.Feeds.FirstOrDefault(feed => feed.Url == url);
+            return _context.Feeds.FirstOrDefault(feed => feed.Url == url);
         }
     }
 }

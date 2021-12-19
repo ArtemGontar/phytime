@@ -30,7 +30,7 @@ namespace Phytime
             string connection = Configuration.GetConnectionString("DefaultConnection");
 
             services.AddDbContext<PhytimeContext>(options => options.UseSqlServer(connection));
-
+            
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {

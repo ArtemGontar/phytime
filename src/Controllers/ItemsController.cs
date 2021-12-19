@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 using Phytime.Models;
 using System;
 using System.Collections.Generic;
@@ -17,19 +15,9 @@ namespace Phytime.Controllers
         private const int FirstValidId = 1;
         private readonly IRepository<Feed> _feedRepository;
 
-        public ItemsController(IRepository<Feed> repository = null)
+        public ItemsController(IRepository<Feed> feedRepository)
         {
-            _feedRepository = repository ?? new FeedRepository();
-        }
-
-        [HttpGet("{id:int}")]
-        public IEnumerable<Item> Get(int id)
-        {
-            if (id < FirstValidId)
-            {
-                throw new ArgumentException(nameof(id));
-            }
-            return GetItems(id);
+            _feedRepository = feedRepository ?? throw new ArgumentNullException(nameof(feedRepository));
         }
 
         private List<Item> GetItems(int id)
@@ -43,7 +31,17 @@ namespace Phytime.Controllers
             return CreateItemsList(list);
         }
 
-        public List<SyndicationItem> GetSyndicationItems(string url)
+        [HttpGet("{id:int}")]
+        public IEnumerable<Item> Get(int id)
+        {
+            if (id < FirstValidId)
+            {
+                throw new ArgumentException(nameof(id));
+            }
+            return GetItems(id);
+        }
+
+        private List<SyndicationItem> GetSyndicationItems(string url)
         {
             if (string.IsNullOrEmpty(url))
             {
@@ -55,7 +53,7 @@ namespace Phytime.Controllers
             return feed.Items.ToList();
         }
 
-        public List<Item> CreateItemsList(List<SyndicationItem> list)
+        private List<Item> CreateItemsList(List<SyndicationItem> list)
         {
             if (list == null)
             {

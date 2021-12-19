@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ServiceModel.Syndication;
+﻿using System.Collections.Generic;
 
 namespace Phytime.Models
 {

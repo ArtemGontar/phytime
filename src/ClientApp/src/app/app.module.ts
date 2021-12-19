@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { Routes, RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
-import { ItemListComponent } from './item-list/item-list.component';
 import { NotFoundComponent } from './not-found.component';
 import { FeedService } from './feed.service';
 import { CitationComponent } from './citation/citation.component';
