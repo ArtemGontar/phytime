@@ -7,18 +7,18 @@ import { AppComponent } from './app.component';
 import { NotFoundComponent } from './not-found.component';
 import { FeedService } from './feed.service';
 import { CitationComponent } from './citation/citation.component';
-import { ArticlesListComponent } from './articles-list/articles-list.component';
+import { SourcesComponent } from './sources/sources.component';
 import { HomeComponent } from './home/home.component';;
-import { ArticleComponent } from './article/article.component'
+import { ArticlesComponent } from './articles/articles.component'
 
 const appRoutes: Routes = [
     { path: '', component: HomeComponent },
-    { path: 'articles', component: ArticleComponent }
+    { path: 'articles', component: ArticlesComponent }
 ];
 
 @NgModule({
     imports: [BrowserModule, FormsModule, HttpClientModule, RouterModule.forRoot(appRoutes)],
-    declarations: [AppComponent, NotFoundComponent, CitationComponent, ArticlesListComponent, HomeComponent, ArticleComponent],
+    declarations: [AppComponent, NotFoundComponent, CitationComponent, SourcesComponent, HomeComponent, ArticlesComponent],
     providers: [FeedService], 
     bootstrap: [AppComponent]
 })
