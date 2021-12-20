@@ -12,9 +12,9 @@ namespace Phytime.Services
 {
     public interface IRssService
     {
-        public IEnumerable<Source> GetSources();
+        IEnumerable<Source> GetSources();
 
-        public FeedViewModel GetSourceByUrl(string url, string sortValue, int page);
+        FeedViewModel GetSourceByUrl(string url, string sortValue, int page);
     }
     
     public class RssService : IRssService
