@@ -1,8 +1,10 @@
 
 <div class="main">
+    <div class="circle-left"></div>
     <div class="source-item" *ngFor="let source of sources">
         <div (click)="openArticles(source)" class="source-link">
            <a>{{source.title}}</a>
         </div>
     </div>
+    <div class="circle-right"></div>
 </div>

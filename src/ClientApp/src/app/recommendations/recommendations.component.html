@@ -1,0 +1,20 @@
+<div class="main">
+  <div class="recommendation-metadata">
+    <div class="recommendation-author">{{ recommendationPost.author }}</div>
+    <div class="recommendation-level">{{ recommendationPost.level }}</div>
+  </div>
+  <div class="recommendation-post">
+    <div class="recommendation" *ngFor="let recommendation of recommendationPost.recommendations">
+      <h3> {{ recommendation.title }} </h3>
+    <div class="recommendation-summary-text">
+        <p> {{ recommendation.summary }} </p>
+    </div>
+    <div class="recommendation-link">Подробнее: <a href="{{recommendation.link}}" target="_blank">{{ recommendation.link }}</a>
+    </div>
+    <hr>
+  </div>
+  <div class="recommendation-metadata">
+    <div class="recommendation-publish-date"> {{recommendationPost.publishDate}} </div>
+    <div (click)="nextRecommendation()" class="next-recommendationPost">к следующей</div>
+  </div>
+</div>
