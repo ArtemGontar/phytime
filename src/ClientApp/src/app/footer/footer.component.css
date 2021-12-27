@@ -1,3 +1,25 @@
 .footer{
   border-top: 3px solid #fff;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.social-medias{
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  margin: 30px;
+  flex-direction: row;
+}
+
+.social-medias>div{
+  margin: 0 30px;
+}
+
+.usefull-links{
+  display: flex;
+  margin:30px;
+  justify-content: space-between;
+  flex-direction: row;
 }
