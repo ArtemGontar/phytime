@@ -5,11 +5,11 @@ import { Router } from '@angular/router';
 import { Source } from '../models/sources';
 
 @Component({
-  selector: 'article',
-  templateUrl: './article.component.html',
-  styleUrls: ['./article.component.css']
+  selector: 'articles',
+  templateUrl: './articles.component.html',
+  styleUrls: ['./articles.component.css']
 })
-export class ArticleComponent implements OnInit {
+export class ArticlesComponent implements OnInit {
 
   constructor(private router: Router, private dataService: FeedService) { }
 

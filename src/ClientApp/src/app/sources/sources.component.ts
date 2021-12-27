@@ -4,11 +4,11 @@ import {FeedService} from "../feed.service";
 import {Source} from "../models/sources";
 
 @Component({
-  selector: 'articles-list',
-  templateUrl: './articles-list.component.html',
-  styleUrls: ['./articles-list.component.css']
+  selector: 'sources',
+  templateUrl: './sources.component.html',
+  styleUrls: ['./sources.component.css']
 })
-export class ArticlesListComponent implements OnInit {
+export class SourcesComponent implements OnInit {
   sources: Source[];
 
   constructor(private router: Router, private dataService: FeedService) {
