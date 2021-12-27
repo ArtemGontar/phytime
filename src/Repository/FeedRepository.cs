@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Phytime.Models;
+using Phytime.Models.Feed;
 
-namespace Phytime.Models
+namespace Phytime.Repository
 {
   public class FeedRepository : IRepository<Feed>
     {

@@ -8,9 +8,11 @@ using Phytime.Models;
 using System.Xml;
 using System.ServiceModel.Syndication;
 using System.Linq;
-using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using Microsoft.Extensions.Options;
+using Phytime.Models.Feed;
+using Phytime.Models.Options;
+using Phytime.Repository;
 
 namespace Phytime.Services
 {
@@ -21,7 +23,7 @@ namespace Phytime.Services
         private readonly IRepository<Feed> _feedRepository;
         private Timer _timer;    
 
-        public EmailService(IOptions<EmailServiceOptions> options, IRepository<Feed> feedRepository = null)
+        public EmailService(IOptions<EmailServiceOptions> options, IRepository<Feed> feedRepository)
         {
             _rssSource = RssSource.getInstance();
             _options = options.Value;
@@ -47,7 +49,7 @@ namespace Phytime.Services
             _timer?.Dispose();
         }
 
-        public void CheckUrls(object state)
+        private void CheckUrls(object state)
         {
             foreach (var source in _rssSource.Sources)
             {
@@ -72,7 +74,7 @@ namespace Phytime.Services
             }
         }
 
-        public List<User> FindUsersToSend(Feed feed)
+        private List<User> FindUsersToSend(Feed feed)
         {
             if(feed == null)
             {
@@ -90,7 +92,7 @@ namespace Phytime.Services
             }
         }
 
-        public MimeMessage FormMessage(string email, string subject, string message)
+        private MimeMessage FormMessage(string email, string subject, string message)
         {
             if (string.IsNullOrEmpty(email))
             {

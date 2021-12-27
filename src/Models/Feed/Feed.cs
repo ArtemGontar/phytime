@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Phytime.Models
+namespace Phytime.Models.Feed
 {
     public class Feed
     {

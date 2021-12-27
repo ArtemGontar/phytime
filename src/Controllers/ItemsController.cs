@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel.Syndication;
 using System.Xml;
+using Phytime.Models.Feed;
+using Phytime.Repository;
 
 namespace Phytime.Controllers
 {

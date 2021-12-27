@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Phytime.Models
+namespace Phytime.Models.Feed
 {
     public class PageInfo
     {

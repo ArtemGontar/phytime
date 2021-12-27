@@ -4,15 +4,17 @@ using System.Linq;
 using System.ServiceModel.Syndication;
 using System.Xml;
 using Phytime.Models;
+using Phytime.Models.Feed;
+using Phytime.Repository;
 using Phytime.ViewModels;
 
 namespace Phytime.Services
 {
     public interface IRssService
     {
-        public IEnumerable<Source> GetSources();
+        IEnumerable<Source> GetSources();
 
-        public FeedViewModel GetSourceByUrl(string url, string sortValue, int page);
+        FeedViewModel GetSourceByUrl(string url, string sortValue, int page);
     }
     
     public class RssService : IRssService

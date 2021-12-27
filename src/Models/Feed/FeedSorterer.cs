@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ServiceModel.Syndication;
 
-namespace Phytime.Services
+namespace Phytime.Models.Feed
 {
     public class FeedSorterer
     {

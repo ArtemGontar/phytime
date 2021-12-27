@@ -13,6 +13,9 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using Phytime.Models.Feed;
+using Phytime.Models.Options;
+using Phytime.Repository;
 
 namespace Phytime
 {

@@ -4,7 +4,9 @@ using Microsoft.Extensions.Options;
 using Moq;
 using Phytime.Controllers;
 using Phytime.Models;
+using Phytime.Models.Options;
 using Phytime.ViewModels;
+using Phytime.ViewModels.TestModels;
 using Xunit;
 
 namespace UnitTestApp.Tests.Controllers

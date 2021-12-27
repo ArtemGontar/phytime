@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Phytime.Models
 {
     public class Source

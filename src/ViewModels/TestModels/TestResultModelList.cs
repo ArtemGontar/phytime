@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace Phytime.ViewModels
+namespace Phytime.ViewModels.TestModels
 {
     public class TestResultModelList
     {

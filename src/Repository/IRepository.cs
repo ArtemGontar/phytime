@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Phytime.Models
+namespace Phytime.Repository
 {
     public interface IRepository<T> : IDisposable
     {

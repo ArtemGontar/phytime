@@ -7,6 +7,8 @@ using Phytime.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
+using Phytime.Repository;
+using Phytime.ViewModels.AccountModels;
 
 namespace Phytime.Controllers
 {

@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Phytime.Models;
 
-namespace Phytime.Models
+namespace Phytime.Repository
 {
     public class UserRepository : IRepository<User>
     {

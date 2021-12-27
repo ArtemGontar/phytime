@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ServiceModel.Syndication;
 
-namespace Phytime.Services
+namespace Phytime.Models
 {
     public class DateComparer<T> : IComparer<T> 
         where T : SyndicationItem
