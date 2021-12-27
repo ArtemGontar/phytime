@@ -1,12 +1,12 @@
 .main{
-  background: #f4f2ff;
   border-radius: 3px;
-  border: 3px solid #8e78fd;
   padding: 30px;
   display: flex;
   flex-wrap: wrap;
   flex: 1;
   justify-content: center;
+  margin: 0 100px;
+  margin-top: 30px;
 }
 .source-item {
   display: flex;
@@ -14,9 +14,13 @@
   margin: 20px 20px;
   height: 100px;
   width: 220px;
-  border: 3px solid #8e78fd;
+  border: 3px solid #fff;
   justify-content: center;
-  cursor: pointer;
+  cursor: pointer;  
+}
+
+.source-item:hover{
+  text-decoration: underline;
 }
 
 .source-link{
@@ -26,5 +30,24 @@
 }
 
 a{
-  color: black;
+  color: #fff;
+}
+
+.circle-left{
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  left: -150px;
+  background-color: #fff;
+}
+
+.circle-right{
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  bottom: -10px;
+  right: -150px;
+  background-color: #fff;
 }
