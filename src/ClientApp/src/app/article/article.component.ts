@@ -58,6 +58,6 @@ export class ArticleComponent implements OnInit {
   }
 
   openArticle(url){
-    console.log("article opened");
+    window.open(url, "_blank");
   }
 }
