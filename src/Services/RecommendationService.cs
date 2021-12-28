@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Phytime.Models;
 using Phytime.Repository;
 
@@ -8,7 +9,7 @@ namespace Phytime.Services
     public interface IRecommendationService
     {
       IEnumerable<Recommendation> GetRecommendations();
-      Recommendation GetRecommendation(int id);
+      Task<Recommendation> GetRecommendationAsync(int id);
     }
     
     public class RecommendationService : IRecommendationService
@@ -25,9 +26,27 @@ namespace Phytime.Services
             return _recommendationRepository.GetAll();
         }
 
-        public Recommendation GetRecommendation(int id)
+        public async Task<Recommendation> GetRecommendationAsync(int id)
         {
-            return _recommendationRepository.Get(id);
+            return await _recommendationRepository.GetAsync(id);
+        }
+
+        public Task AddRecommendationAsync(Recommendation recommendation)
+        {
+            _recommendationRepository.AddAsync(recommendation);
+            return Task.CompletedTask;
+        }
+
+        public Task UpdateRecommendationAsync(Recommendation recommendation)
+        {
+            _recommendationRepository.UpdateAsync(recommendation);
+            return Task.CompletedTask;
+        }
+
+        public Task RemoveRecommendationAsync(int id)
+        {
+            _recommendationRepository.DeleteAsync(id);
+            return Task.CompletedTask;
         }
     }
 }

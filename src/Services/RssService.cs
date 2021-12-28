@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel.Syndication;
+using System.Threading.Tasks;
 using System.Xml;
 using Phytime.Models;
 using Phytime.Models.Feed;
@@ -14,7 +15,7 @@ namespace Phytime.Services
     {
         IEnumerable<Source> GetSources();
 
-        FeedViewModel GetSource(int id, string sortValue, int page);
+        Task<FeedViewModel> GetSourceAsync(int id, string sortValue, int page);
     }
     
     public class RssService : IRssService
@@ -36,31 +37,31 @@ namespace Phytime.Services
             return _rssSource.Sources;
         }
 
-        public FeedViewModel GetSource(int id, string sortValue, int page)
+        public async Task<FeedViewModel> GetSourceAsync(int id, string sortValue, int page)
         {
             if (id == default)
             {
                 throw new ArgumentNullException(nameof(id));
             }
             
-            var viewModel = CreateViewModel(id, sortValue, page);
+            var viewModel = await CreateViewModelAsync(id, sortValue, page);
             return viewModel;
         }
         
-        private FeedViewModel CreateViewModel(int id, string sortValue, int page)
+        private async Task<FeedViewModel> CreateViewModelAsync(int id, string sortValue, int page)
         {
             //ViewBag.Subscribed = IsSubscribed(url);
-            return PreparingFeedViewModel(id, page, sortValue);
+            return await PreparingFeedViewModelAsync(id, page, sortValue);
         }
         
-        private FeedViewModel PreparingFeedViewModel(int id, int page, string sortValue)
+        private async Task<FeedViewModel> PreparingFeedViewModelAsync(int id, int page, string sortValue)
         {
             if (page < DefaultPage)
             {
                 throw new ArgumentException(nameof(page));
             }
             var sorterer = new FeedSorterer();
-            var rssFeed = _feedRepository.Get(id);
+            var rssFeed = await _feedRepository.GetAsync(id);
             var feedItems = GetSyndicationItems(rssFeed.Url);
             sorterer.SortFeed(sortValue, ref feedItems);
             var pageInfo = new PageInfo { PageNumber = page, TotalItems = feedItems.Count };

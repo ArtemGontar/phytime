@@ -31,7 +31,7 @@ namespace Phytime.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = _userRepository.GetBy(model.Email);
+                User user = await _userRepository.GetByEmailAsync(model.Email);
                 if (user != null && model.Password.Equals(user.PasswordHash))
                 {
                     await Authenticate(model.Email);
@@ -55,14 +55,14 @@ namespace Phytime.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = _userRepository.GetBy(model.Email);
+                User user = await _userRepository.GetByEmailAsync(model.Email);
                 if (user == null) {
                     var newUser = new User()
                     { 
                         Email = model.Email 
                     };
                     newUser.SetPassword(model.Password);
-                    _userRepository.Add(newUser);
+                    await _userRepository.AddAsync(newUser);
 
                     await Authenticate(model.Email);
 

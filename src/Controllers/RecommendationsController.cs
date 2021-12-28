@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Phytime.Models;
 using Phytime.Services;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Phytime.Controllers
 {
@@ -23,9 +24,9 @@ namespace Phytime.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public Recommendation GetRecommendation(int id)
+        public async Task<Recommendation> GetRecommendation(int id)
         {
-            return _recommendationService.GetRecommendation(id);
+            return await _recommendationService.GetRecommendationAsync(id);
         }
     }
 }

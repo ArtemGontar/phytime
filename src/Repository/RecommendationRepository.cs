@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Phytime.Models;
 
 namespace Phytime.Repository
@@ -17,25 +18,32 @@ namespace Phytime.Repository
             return _context.Recommendations;
         }
 
-        public Recommendation Get(int id)
+        public async Task<Recommendation> GetAsync(int id)
         {
-            return _context.Recommendations.Find(id);
+            return await _context.Recommendations.FindAsync(id);
         }
 
-        public void Add(Recommendation item)
+        public async Task AddAsync(Recommendation item)
         {
-            _context.Recommendations.Add(item);
-            Save();
+            await _context.Recommendations.AddAsync(item);
+            SaveAsync();
         }
 
-        public void Update(Recommendation item)
+        public async Task UpdateAsync(Recommendation item)
         {
             _context.Recommendations.Update(item);
-            Save();
+            SaveAsync();
         }
-        public void Save()
+
+        public async Task DeleteAsync(int id)
         {
-            _context.SaveChanges();
+            var item = await _context.Recommendations.FindAsync(id);
+            _context.Recommendations.Remove(item);
+        }
+
+        public async Task SaveAsync()
+        {
+            await _context.SaveChangesAsync();
         }
 
         #region Dispose

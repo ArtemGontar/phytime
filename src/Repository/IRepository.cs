@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Phytime.Repository
 {
     public interface IRepository<T> : IDisposable
     {
         IEnumerable<T> GetAll();
-        T Get(int id);
-        void Add(T item);
-        void Update(T item);
-        void Save();
+        Task<T> GetAsync(int id);
+        Task AddAsync(T item);
+        Task UpdateAsync(T item);
+        Task DeleteAsync(int id);
+        Task SaveAsync();
     }
 }

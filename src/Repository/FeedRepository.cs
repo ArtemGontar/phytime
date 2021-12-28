@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Phytime.Models;
 using Phytime.Models.Feed;
@@ -9,8 +10,8 @@ namespace Phytime.Repository
 {
     public interface IFeedRepository : IRepository<Feed>
     {
-        Feed GetInclude(Feed item);
-        Feed GetBy(string url);
+        Task<Feed> GetIncludeAsync(Feed item);
+        Task<Feed> GetByAsync(string url);
     }
 
     public class FeedRepository : IFeedRepository
@@ -26,34 +27,42 @@ namespace Phytime.Repository
         {
             return _context.Feeds;
         }
-        public Feed Get(int id)
+        public async Task<Feed> GetAsync(int id)
         {
-            return _context.Feeds.Find(id);
+            return await _context.Feeds.FindAsync(id);
         }
 
-        public Feed GetInclude(Feed item)
+        public async Task<Feed> GetIncludeAsync(Feed item)
         {
-            return _context.Feeds.Include(f => f.Users).FirstOrDefault(f => f.Id == item.Id);
-        }
-        public Feed GetBy(string url)
-        {
-            return _context.Feeds.FirstOrDefault(feed => feed.Url == url);
+            return await _context.Feeds.Include(f => f.Users).FirstOrDefaultAsync(f => f.Id == item.Id);
         }
 
-        public void Add(Feed item)
+        public async Task<Feed> GetByAsync(string url)
         {
-            _context.Feeds.Add(item);
-            Save();
+            return await _context.Feeds.FirstOrDefaultAsync(feed => feed.Url == url);
         }
 
-        public void Update(Feed item)
+        public async Task AddAsync(Feed item)
+        {
+            await _context.Feeds.AddAsync(item);
+            SaveAsync();
+        }
+
+        public async Task UpdateAsync(Feed item)
         {
             _context.Feeds.Update(item);
-            Save();
+            SaveAsync();
         }
-        public void Save()
+        public async Task DeleteAsync(int id)
         {
-            _context.SaveChanges();
+            var item = await _context.Feeds.FindAsync(id);
+            _context.Feeds.Remove(item);
+            SaveAsync();
+        }
+
+        public async Task SaveAsync()
+        {
+            await _context.SaveChangesAsync();
         }
 
         #region Disposable

@@ -49,41 +49,41 @@ namespace Phytime.Services
             _timer?.Dispose();
         }
 
-        private void CheckUrls(object state)
+        private async void CheckUrls(object state)
         {
             foreach (var source in _rssSource.Sources)
             {
                 XmlReader reader = XmlReader.Create(source.Url);
                 SyndicationFeed feed = SyndicationFeed.Load(reader);
                 reader.Close();
-                var rssFeed = _feedRepository.GetBy(source.Url);
+                var rssFeed = await _feedRepository.GetByAsync(source.Url);
                 if (rssFeed != null)
                 {
                     if (rssFeed.ItemsCount != feed.Items.ToList().Count)
                     {
-                        var users = FindUsersToSend(rssFeed);
+                        var users = await FindUsersToSend(rssFeed);
                         SendNotifications(users, rssFeed);
                     }
                 }
                 //needs to be moved to new class
                 else
                 {
-                    _feedRepository.Add(new Feed { Title = source.Title,
+                    await _feedRepository.AddAsync(new Feed { Title = source.Title,
                         Url = source.Url, ItemsCount = feed.Items.ToList().Count });
                 }
             }
         }
 
-        private List<User> FindUsersToSend(Feed feed)
+        private async Task<IEnumerable<User>> FindUsersToSend(Feed feed)
         {
             if(feed == null)
             {
                 throw new ArgumentNullException(nameof(feed));
             }
-            return _feedRepository.GetInclude(feed).Users;
+            return (await _feedRepository.GetIncludeAsync(feed)).Users;
         }
 
-        private void SendNotifications(List<User> users, Feed feed)
+        private void SendNotifications(IEnumerable<User> users, Feed feed)
         { 
             foreach (var user in users)
             {

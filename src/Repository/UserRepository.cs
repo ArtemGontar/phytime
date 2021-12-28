@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Phytime.Models;
 
@@ -8,7 +9,8 @@ namespace Phytime.Repository
 {
     public interface IUserRepository : IRepository<User>
     {
-        User GetBy(string email);
+        Task<User> GetByEmailAsync(string email);
+        Task<User> GetIncludeAsync(User item);
     }
     public class UserRepository : IUserRepository
     {
@@ -23,36 +25,43 @@ namespace Phytime.Repository
         {
             return _context.Users;
         }
-        public User Get(int id)
+        public async Task<User> GetAsync(int id)
         {
-            return _context.Users.Find(id);
+            return await _context.Users.FindAsync(id);
         }
 
-        public User GetBy(string email)
+        public async Task<User> GetByEmailAsync(string email)
         {
-            return _context.Users.FirstOrDefault(user => user.Email == email);
+            return await _context.Users.FirstOrDefaultAsync(user => user.Email == email);
         }
 
-        public User GetInclude(User item)
+        public async Task<User> GetIncludeAsync(User item)
         {
-            return _context.Users.Include(u => u.Feeds).FirstOrDefault(u => u.Id == item.Id);
+            return await _context.Users.Include(u => u.Feeds).FirstOrDefaultAsync(u => u.Id == item.Id);
         }
 
-        public void Add(User item)
+        public async Task AddAsync(User item)
         {
-            _context.Users.Add(item);
-            Save();
+            await _context.Users.AddAsync(item);
+            SaveAsync();
         }
 
-        public void Update(User item)
+        public async Task UpdateAsync(User item)
         {
             _context.Entry(item).State = EntityState.Modified;
-            Save();
+            SaveAsync();
         }
 
-        public void Save()
+        public async Task DeleteAsync(int id)
         {
-            _context.SaveChanges();
+            var item = await _context.Users.FindAsync(id);
+            _context.Users.Remove(item);
+            SaveAsync();
+        }
+
+        public async Task SaveAsync()
+        {
+            await _context.SaveChangesAsync();
         }
 
 

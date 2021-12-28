@@ -32,7 +32,7 @@ namespace Phytime.Controllers
         [HttpGet("{id:int}")]
         public IActionResult GetRss(int id, int page = DefaultPage, string sortValue = DefaultSortValue)
         {
-            var viewModel = _rssService.GetSource(id, sortValue, page);
+            var viewModel = _rssService.GetSourceAsync(id, sortValue, page);
             return Ok(viewModel);
         }
         
