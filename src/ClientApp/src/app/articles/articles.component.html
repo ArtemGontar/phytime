@@ -1,13 +1,19 @@
 <div class="main">
-  <div (click)="openArticle(item.links[0].uri)" class="article" *ngFor="let item of feed.syndicationItems">
-    <h3> {{item.title.text}} </h3>
-  <div class="article-summary-text">
-      <p> {{item.summary.text}} </p>
+  <div class="articles">
+    <div class="article" *ngFor="let item of syndicationItems | async">
+      <h3 (click)="openArticle(item.links[0].uri)"> {{item.title.text}} </h3>
+    <div class="article-summary-text">
+        <p> {{item.summary.text}} </p>
+    </div>
+    <div class="article-publish-date"> {{item.publishDate}} </div> 
   </div>
-  <div class="article-publish-date"> {{item.publishDate}} </div>
 
-  </div>
-
-  <div (click)="nextArticles('', 1, '')" class="next-articles">
+  <div class="buttons">
+    <div *ngIf="this.page > 1" (click)="prevArticles()" class="prev-articles">
+      Назад
+    </div>
+    <div (click)="nextArticles()" class="next-articles">
+      Дальше
+    </div>
   </div>
 </div>

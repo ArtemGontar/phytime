@@ -52,6 +52,7 @@ namespace Phytime.Services
             {
                 sources.Add(new Source()
                 {
+                    Id = i + 1,
                     Title = titles[i],
                     Url = urls[i]
                 });

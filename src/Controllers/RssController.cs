@@ -28,13 +28,13 @@ namespace Phytime.Controllers
         [HttpGet]
         public IActionResult GetRssList()
         {
-            return Ok(_rssSource.Sources);
+            return Ok(_rssService.GetSources());
         }
         
-        [HttpGet("some")]
-        public IActionResult GetRss(string url, int page = DefaultPage, string sortValue = DefaultSortValue)
+        [HttpGet("{id}")]
+        public IActionResult GetRss(int id, int page = DefaultPage, string sortValue = DefaultSortValue)
         {
-            var viewModel = _rssService.GetSourceByUrl(url, sortValue, page);
+            var viewModel = _rssService.GetSource(id, sortValue, page);
             return Ok(viewModel);
         }
         

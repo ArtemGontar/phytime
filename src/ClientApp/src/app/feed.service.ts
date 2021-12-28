@@ -1,5 +1,8 @@
 ﻿import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Feed } from './models/rss';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class FeedService {
@@ -18,10 +21,10 @@ export class FeedService {
         return this.http.get(this.feedUrl);
     }
 
-    getRssByUrl(url: string, page: number, sortValue:  string) {
-        return this.http.get(this.feedUrl 
-            + "some?url=" + url 
-            + "&page=" + page
-            + "&sortValue=" + sortValue);
+    getRss(id: number, page: number, sortValue:  string): Observable<Feed> {
+        return this.http.get(this.feedUrl + id
+            + "?page=" + page
+            + "&sortValue=" + sortValue)
+            .pipe(map((data) => data));
     }
 }

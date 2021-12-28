@@ -27,7 +27,7 @@ export class SourcesComponent implements OnInit {
   }
 
   openArticles(source: Source){
-    this.router.navigate(['/articles'], 
+    this.router.navigate(['/sources/' + source.id], 
     {
       state: {
         source: {

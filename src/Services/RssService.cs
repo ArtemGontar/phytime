@@ -14,7 +14,7 @@ namespace Phytime.Services
     {
         IEnumerable<Source> GetSources();
 
-        FeedViewModel GetSourceByUrl(string url, string sortValue, int page);
+        FeedViewModel GetSource(int id, string sortValue, int page);
     }
     
     public class RssService : IRssService
@@ -36,42 +36,37 @@ namespace Phytime.Services
             return _rssSource.Sources;
         }
 
-        public FeedViewModel GetSourceByUrl(string url, string sortValue, int page)
+        public FeedViewModel GetSource(int id, string sortValue, int page)
         {
-            if (string.IsNullOrEmpty(url))
+            if (id == default)
             {
-                throw new ArgumentNullException(nameof(url));
+                throw new ArgumentNullException(nameof(id));
             }
             
-            var viewModel = CreateViewModel(url, sortValue, page);
+            var viewModel = CreateViewModel(id, sortValue, page);
             return viewModel;
         }
         
-        private FeedViewModel CreateViewModel(string url, string sortValue, int page)
+        private FeedViewModel CreateViewModel(int id, string sortValue, int page)
         {
             //ViewBag.Subscribed = IsSubscribed(url);
-            var feedItems = GetSyndicationItems(url);
-            var sorterer = new FeedSorterer();
-            sorterer.SortFeed(sortValue, ref feedItems);
-            var rssFeedViewModel = PreparingFeedViewModel(url, page, feedItems);
-            rssFeedViewModel.SortValue = sortValue;
-            return rssFeedViewModel;
+            return PreparingFeedViewModel(id, page, sortValue);
         }
         
-        private FeedViewModel PreparingFeedViewModel(string url, int page, List<SyndicationItem> items)
+        private FeedViewModel PreparingFeedViewModel(int id, int page, string sortValue)
         {
             if (page < DefaultPage)
             {
                 throw new ArgumentException(nameof(page));
             }
-            if (items == null)
-            {
-                throw new ArgumentNullException(nameof(items));
-            }
-            var pageInfo = new PageInfo { PageNumber = page, TotalItems = items.Count };
-            var itemsPerPages =  items.Skip((page - 1) * pageInfo.PageSize).Take(pageInfo.PageSize);
-            var rssFeed = _feedRepository.GetBy(url);
-            var model = new FeedViewModel() { FeedValue = rssFeed, PageInfo = pageInfo, SyndicationItems = itemsPerPages.ToList() };
+            var sorterer = new FeedSorterer();
+            var rssFeed = _feedRepository.Get(id);
+            var feedItems = GetSyndicationItems(rssFeed.Url);
+            sorterer.SortFeed(sortValue, ref feedItems);
+            var pageInfo = new PageInfo { PageNumber = page, TotalItems = feedItems.Count };
+            var itemsPerPages =  feedItems.Skip((page - 1) * pageInfo.PageSize).Take(pageInfo.PageSize);
+            var model = new FeedViewModel() { PageInfo = pageInfo, SyndicationItems = itemsPerPages.ToList() };
+            model.SortValue = sortValue;
             return model;
         }
         private List<SyndicationItem> GetSyndicationItems(string url)

@@ -7,6 +7,18 @@
   font-size: 20px;
 }
 
+.brand{
+  display: flex;
+  flex-direction: column;
+  height: 50px;
+  width: 220px;
+  border-right: 1px solid #fff;
+  justify-content: center;
+  cursor: pointer;
+  text-align: center;
+  font-family: 'Kiwi Maru', serif;
+  font-size: 32px;
+}
 
 .navbar-item {
   display: flex;

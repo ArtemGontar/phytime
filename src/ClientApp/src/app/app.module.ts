@@ -18,7 +18,7 @@ const appRoutes: Routes = [
     { path: '', component: HomeComponent },
     { path: 'sources', component: SourcesComponent },
     { path: 'recommendations', component: RecommendationsComponent },
-    { path: 'articles', component: ArticlesComponent }
+    { path: 'sources/:id', component: ArticlesComponent }
 ];
 
 @NgModule({

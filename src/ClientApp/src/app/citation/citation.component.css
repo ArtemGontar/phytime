@@ -1,16 +1,17 @@
 .main{
   margin: 0 300px;
+  font-family: 'Play';
 }
 .citation{
-  background: #f4f2ff;
+  border: 3px dashed #fff;
   border-radius: 3px;
-  border-left: 5px solid #8e78fd;
   margin: 30px 0;
   padding: 30px;
+  font-size: 20px;
 }
 
 .blockquote-header{
   position: relative;
-  top: 45px;
-  left: 30px;
+  top: 25px;
+  left: 20px;
 }

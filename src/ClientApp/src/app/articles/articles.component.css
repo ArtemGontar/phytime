@@ -1,22 +1,46 @@
 .main{
-  margin: 0 300px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 150px;
   margin-top: 30px;
-}
-.next-articles{
-  width: 100px;
-  height: 20px;
-  background-color: blue;
+  font-family: 'Play';
+  font-size: 20px;
 }
 
 .article{
   cursor: pointer;
-  border-bottom: 2px solid #8e78fd;
+  border-top: 2px solid #fff;
 }
 
+.article:first-child{
+  border-top: 0px;
+}
 .article-summary-text{
   margin: 30px 0;
 }
 
 .article-publish-date{
   padding-bottom: 20px;
+}
+
+.buttons{
+}
+
+.buttons>div{
+  width: 200px;
+  height: 40px;
+  background-color: #fff;
+  color: #000;
+  text-align: center;
+  cursor: pointer;
+}
+
+.next-articles{
+  float: right;
+  margin: 30px 0;
+}
+
+.prev-articles{
+  float: left;
+  margin: 30px 0;
 }
