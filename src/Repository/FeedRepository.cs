@@ -9,8 +9,8 @@ namespace Phytime.Repository
 {
     public interface IFeedRepository : IRepository<Feed>
     {
-        public Feed GetInclude(Feed item);
-        public Feed GetBy(string url);
+        Feed GetInclude(Feed item);
+        Feed GetBy(string url);
     }
 
     public class FeedRepository : IFeedRepository

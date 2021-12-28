@@ -15,14 +15,12 @@ namespace Phytime.Controllers
 
         private readonly RssSource _rssSource;
         private IRssService _rssService;
-        private readonly IRepository<User> _userRepository;
 
         public RssController(IRssService rssService, 
-            IRepository<User> userRepository = null)
+            IUserRepository userRepository = null)
         {
             _rssService = rssService;
             _rssSource = RssSource.getInstance();
-            _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         }
 
         [HttpGet]

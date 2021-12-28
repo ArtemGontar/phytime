@@ -23,9 +23,9 @@ namespace Phytime.Services
         public const string DefaultSortValue = "Newest";
         
         private readonly RssSource _rssSource;
-        private readonly IRepository<Feed> _feedRepository;
+        private readonly IFeedRepository _feedRepository;
 
-        public RssService(IRepository<Feed> feedRepository)
+        public RssService(IFeedRepository feedRepository)
         {
             _feedRepository = feedRepository ?? throw new ArgumentNullException(nameof(feedRepository));
             _rssSource = RssSource.getInstance();
