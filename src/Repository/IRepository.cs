@@ -1,14 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Phytime.Repository
 {
     public interface IRepository<T> : IDisposable
     {
+        IEnumerable<T> GetAll();
         T Get(int id);
-        T GetBy(string parameter);
         void Add(T item);
         void Update(T item);
-        T GetInclude(T item);
         void Save();
     }
 }

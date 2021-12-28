@@ -2,21 +2,19 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using Phytime.ViewModels;
 using Phytime.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.Extensions.Options;
 using Phytime.Repository;
 using Phytime.ViewModels.AccountModels;
 
 namespace Phytime.Controllers
 {
-    public class AccountController : Controller
+  public class AccountController : Controller
     {
-        private readonly IRepository<User> _userRepository;
+        private readonly IUserRepository _userRepository;
 
-        public AccountController(IRepository<User> userRepository)
+        public AccountController(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }
@@ -58,9 +56,11 @@ namespace Phytime.Controllers
             if (ModelState.IsValid)
             {
                 User user = _userRepository.GetBy(model.Email);
-                if (user == null)
-                {
-                    var newUser = new User() { Email = model.Email };
+                if (user == null) {
+                    var newUser = new User()
+                    { 
+                        Email = model.Email 
+                    };
                     newUser.SetPassword(model.Password);
                     _userRepository.Add(newUser);
 

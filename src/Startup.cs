@@ -8,18 +8,15 @@ using Phytime.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Configuration;
 using Phytime.Services;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
-using System.IO;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using Phytime.Models.Feed;
 using Phytime.Models.Options;
 using Phytime.Repository;
 
 namespace Phytime
 {
-    public class Startup
+  public class Startup
     {
         public Startup(IConfiguration configuration)
         {
@@ -52,16 +49,14 @@ namespace Phytime
             services.Configure<ConnectionStringsOptions>(Configuration.GetSection(
                                         ConnectionStringsOptions.ConnectionStrings));
 
-            //services.AddDistributedMemoryCache();
-
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
-            services.AddScoped<IRepository<Feed>, FeedRepository>();
-            services.AddScoped<IRepository<User>, UserRepository>();
+            services.AddScoped<IFeedRepository, FeedRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IRssService, RssService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
             //services.AddHostedService<EmailService>();
+            services.AddSwaggerGen();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -69,6 +64,12 @@ namespace Phytime
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(options =>
+                {
+                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+                    options.RoutePrefix = "swagger";
+                });
             }
             app.UseStaticFiles();
             if (!env.IsDevelopment())
