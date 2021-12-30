@@ -12,9 +12,9 @@ import { SourcesComponent } from './sources/sources.component';
 import { HomeComponent } from './home/home.component';;
 import { ArticlesComponent } from './articles/articles.component';
 import { NavbarComponent } from './navbar/navbar.component';
-import { RecommendationsComponent } from './recommendations/recommendations.component'
-;
-import { FooterComponent } from './footer/footer.component'
+import { RecommendationsComponent } from './recommendations/recommendations.component';
+import { MatSliderModule } from '@angular/material/slider';
+import { FooterComponent } from './footer/footer.component';
 const appRoutes: Routes = [
     { path: '', component: HomeComponent },
     { path: 'sources', component: SourcesComponent },
@@ -23,7 +23,7 @@ const appRoutes: Routes = [
 ];
 
 @NgModule({
-    imports: [BrowserModule, FormsModule, HttpClientModule, RouterModule.forRoot(appRoutes)],
+    imports: [MatSliderModule, BrowserModule, FormsModule, HttpClientModule, RouterModule.forRoot(appRoutes)],
     declarations: [AppComponent, NotFoundComponent, CitationComponent, SourcesComponent, HomeComponent, ArticlesComponent, NavbarComponent, RecommendationsComponent, FooterComponent],
     providers: [FeedService, RecommendationService], 
     bootstrap: [AppComponent]
