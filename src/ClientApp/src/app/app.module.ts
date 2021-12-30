@@ -5,7 +5,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { Routes, RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { NotFoundComponent } from './not-found.component';
-import { FeedService } from './feed.service';
+import { FeedService } from './services/feed.service';
+import { RecommendationService } from './services/recommendation.service';
 import { CitationComponent } from './citation/citation.component';
 import { SourcesComponent } from './sources/sources.component';
 import { HomeComponent } from './home/home.component';;
@@ -24,7 +25,7 @@ const appRoutes: Routes = [
 @NgModule({
     imports: [BrowserModule, FormsModule, HttpClientModule, RouterModule.forRoot(appRoutes)],
     declarations: [AppComponent, NotFoundComponent, CitationComponent, SourcesComponent, HomeComponent, ArticlesComponent, NavbarComponent, RecommendationsComponent, FooterComponent],
-    providers: [FeedService], 
+    providers: [FeedService, RecommendationService], 
     bootstrap: [AppComponent]
 })
 export class AppModule { }

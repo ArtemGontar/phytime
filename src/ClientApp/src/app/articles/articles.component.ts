@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Feed, SyndicationItem } from '../models/rss';
-import {FeedService} from "../feed.service";
+import {FeedService} from "../services/feed.service";
 import { ActivatedRoute, Router } from '@angular/router';
 import { Source } from '../models/sources';
 import { map } from "rxjs/operators";

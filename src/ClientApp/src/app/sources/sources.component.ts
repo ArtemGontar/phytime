@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import {FeedService} from "../feed.service";
+import {FeedService} from "../services/feed.service";
 import {Source} from "../models/sources";
 
 @Component({

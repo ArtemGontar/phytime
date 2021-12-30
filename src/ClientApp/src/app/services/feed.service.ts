@@ -1,6 +1,6 @@
 ﻿import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Feed } from './models/rss';
+import { Feed } from '../models/rss';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 

@@ -52,8 +52,10 @@ namespace Phytime
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.AddScoped<IFeedRepository, FeedRepository>();
+            services.AddScoped<IRepository<Recommendation>, RecommendationRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IRssService, RssService>();
+            services.AddScoped<IRecommendationService, RecommendationService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             //services.AddHostedService<EmailService>();
             services.AddSwaggerGen();

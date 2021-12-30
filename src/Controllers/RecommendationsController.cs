@@ -18,7 +18,7 @@ namespace Phytime.Controllers
         }
         
         [HttpGet]
-        private IEnumerable<Recommendation> GetRecommendations()
+        public IEnumerable<Recommendation> GetRecommendations()
         {
             return _recommendationService.GetRecommendations();
         }

@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
-using Phytime.Models;
-using Phytime.ViewModels;
 using System;
 using Phytime.Models.Test;
 using System.Linq;
@@ -13,7 +10,7 @@ using Phytime.ViewModels.TestModels;
 
 namespace Phytime.Controllers
 {
-    public class TestController : Controller
+  public class TestController : Controller
     {
         private const int QuestionsCategory = 9;
         private readonly ConnectionStringsOptions _options;
