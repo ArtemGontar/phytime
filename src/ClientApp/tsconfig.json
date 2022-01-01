@@ -6,22 +6,21 @@
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
-    "module": "esnext",
     "moduleResolution": "node",
-    "target": "es2015",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
+    "importHelpers": true,
+    "target": "es2017",
+    "module": "es2020",
     "lib": [
-      "es2018",
+      "es2020",
       "dom"
-    ]
+    ],
+    "strictBindCallApply": true,
+    "esModuleInterop": true
   },
-  "files": [
-    "src/main.ts",
-    "src/polyfills.ts"
-  ],
-  "include": [
-    "src/**/*.d.ts"
-  ]
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  }
 }
