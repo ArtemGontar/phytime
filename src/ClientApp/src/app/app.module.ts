@@ -15,13 +15,15 @@ import { RecommendationsComponent } from './recommendations/recommendations.comp
 import { FooterComponent } from './footer/footer.component';
 import { PortalModule } from '@angular/cdk/portal';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MaterialModule } from './shared/modules/material/material.module';
+import { MaterialModule } from './shared/modules/material/material.module';;
+import { ClientOnboardingComponent } from './client-onboarding/client-onboarding.component'
 
 const appRoutes: Routes = [
     { path: '', component: HomeComponent },
     { path: 'sources', component: SourcesComponent },
     { path: 'recommendations', component: RecommendationsComponent },
-    { path: 'sources/:id', component: ArticlesComponent }
+    { path: 'sources/:id', component: ArticlesComponent },
+    { path: 'clients-onboarding', component: ClientOnboardingComponent },
 ];
 
 @NgModule({
@@ -42,7 +44,8 @@ const appRoutes: Routes = [
         ArticlesComponent, 
         NavbarComponent, 
         RecommendationsComponent, 
-        FooterComponent],
+        FooterComponent,
+        ClientOnboardingComponent],
     providers: [FeedService, RecommendationService],
     bootstrap: [AppComponent]
 })
