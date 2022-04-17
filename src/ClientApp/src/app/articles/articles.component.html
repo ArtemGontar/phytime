@@ -1,9 +1,10 @@
 <div class="main">
   <div class="articles">
     <div class="article" *ngFor="let item of syndicationItems | async">
-      <h3 (click)="openArticle(item.links[0].uri)"> {{item.title.text}} </h3>
+      <h3> {{item.title}} </h3>
+      <!-- (click)="openArticle(item.links[0].uri)" -->
     <div class="article-summary-text">
-        <p> {{item.summary.text}} </p>
+        <p> {{item.summary}} </p>
     </div>
     <div class="article-publish-date"> {{item.publishDate}} </div> 
   </div>
