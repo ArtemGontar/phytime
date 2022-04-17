@@ -15,6 +15,7 @@ import { RecommendationsComponent } from './recommendations/recommendations.comp
 import { FooterComponent } from './footer/footer.component';
 import { PortalModule } from '@angular/cdk/portal';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MaterialModule } from './shared/modules/material/material.module';
 
 const appRoutes: Routes = [
     { path: '', component: HomeComponent },
@@ -27,6 +28,7 @@ const appRoutes: Routes = [
     imports: [
         BrowserAnimationsModule,
         BrowserModule,
+        MaterialModule,
         FormsModule,
         PortalModule,
         ReactiveFormsModule,

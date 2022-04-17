@@ -19,7 +19,10 @@
             "buildOptimizer": false,
             "sourceMap": true,
             "optimization": false,
-            "namedChunks": true
+            "namedChunks": true,
+            "styles": [
+              "src/styles.css"
+            ]
           },
           "configurations": {
             "production": {
